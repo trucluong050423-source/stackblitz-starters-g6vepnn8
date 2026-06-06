@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import];import type { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 const DEFAULT_GRAMMAR: GrammarItem[] = [
   { pattern: "은/는", meaning: "Chủ đề của câu" },
