@@ -1,7 +1,76 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type: "Chưa có từ nào để lật flashcard.",import type { CSSProperties } from "react";
+import type { CSSProperties } from "react";
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
+type GrammarItem = {
+  pattern: string;
+  meaning: string;
+};
+
+type DocItem = {
+  name: string;
+  url: string;
+};
+
+const DEFAULT_VOCAB: VocabItem[] = [
+  { word: "안녕하세요", meaning: "Xin chào" },
+  { word: "감사합니다", meaning: "Cảm ơn" },
+  { word: "학교", meaning: "Trường học" },
+  { word: "학생", meaning: "Học sinh" },
+  { word: "선생님", meaning: "Giáo viên" },
+];
+
+const DEFAULT_GRAMMAR: GrammarItem[] = [
+  { pattern: "은/는", meaning: "Chủ đề của câu" },
+  { pattern: "이/가", meaning: "Chủ ngữ" },
+  { pattern: "을/를", meaning: "Tân ngữ" },
+  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
+  { pattern: "있다 / 없다", meaning: "Có / Không có" },
+];
+
+const texts = {
+  vi: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
+    login: "Login",
+    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
+    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
+    heroText:
+      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
+    start: "Bắt đầu học",
+    docs: "Xem tài liệu",
+    todayTitle: "Hôm nay học gì?",
+    todayText: "5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.",
+    todayProgress: "Tiến độ hôm nay",
+    home: "Trang chủ",
+    learn: "Học tập",
+    flash: "Flashcard",
+    quiz: "Quiz",
+    docsTab: "Tài liệu",
+    mainTitle: "Chức năng chính",
+    vocabTitle: "Từ vựng",
+    grammarTitle: "Ngữ pháp",
+    flashTitle: "Flashcard",
+    quizTitle: "Quiz",
+    learnTitle: "Học tập",
+    addVocab: "Thêm từ vựng",
+    addGrammar: "Thêm ngữ pháp",
+    vocabList: "Danh sách từ vựng",
+    grammarList: "Danh sách ngữ pháp",
+    noVocab: "Chưa có từ nào.",
+    noGrammar: "Chưa có ngữ pháp nào.",
+    noFlash: "Chưa có từ nào để lật flashcard.",
     flipHint: "Bấm để lật thẻ",
     nextWord: "Từ tiếp theo",
     noQuiz: "Thêm ít nhất 3 từ để bắt đầu quiz.",
@@ -133,7 +202,6 @@ export default function Page() {
 
   const addVocab = () => {
     if (!word.trim() || !meaning.trim()) return;
-
     setVocab([
       ...vocab,
       {
@@ -141,14 +209,12 @@ export default function Page() {
         meaning: meaning.trim(),
       },
     ]);
-
     setWord("");
     setMeaning("");
   };
 
   const addGrammar = () => {
     if (!grammarPattern.trim() || !grammarMeaning.trim()) return;
-
     setGrammar([
       ...grammar,
       {
@@ -156,7 +222,6 @@ export default function Page() {
         meaning: grammarMeaning.trim(),
       },
     ]);
-
     setGrammarPattern("");
     setGrammarMeaning("");
   };
@@ -1185,71 +1250,3 @@ const styles: Record<string, CSSProperties> = {
     textDecoration: "none",
   },
 };
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
-  pattern: string;
-  meaning: string;
-};
-
-type DocItem = {
-  name: string;
-  url: string;
-};
-
-const DEFAULT_VOCAB: VocabItem[] = [
-  { word: "안녕하세요", meaning: "Xin chào" },
-  { word: "감사합니다", meaning: "Cảm ơn" },
-  { word: "학교", meaning: "Trường học" },
-  { word: "학생", meaning: "Học sinh" },
-  { word: "선생님", meaning: "Giáo viên" },
-];
-
-const DEFAULT_GRAMMAR: GrammarItem[] = [
-  { pattern: "은/는", meaning: "Chủ đề của câu" },
-  { pattern: "이/가", meaning: "Chủ ngữ" },
-  { pattern: "을/를", meaning: "Tân ngữ" },
-  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
-  { pattern: "있다 / 없다", meaning: "Có / Không có" },
-];
-
-const texts = {
-  vi: {
-    title: "ai-noi-hoc-tieng-han-khong-kho",
-    subtitle:
-      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
-    login: "Login",
-    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
-    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
-    heroText:
-      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
-    start: "Bắt đầu học",
-    docs: "Xem tài liệu",
-    todayTitle: "Hôm nay học gì?",
-    todayText: "5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.",
-    todayProgress: "Tiến độ hôm nay",
-    home: "Trang chủ",
-    learn: "Học tập",
-    flash: "Flashcard",
-    quiz: "Quiz",
-    docsTab: "Tài liệu",
-    mainTitle: "Chức năng chính",
-    vocabTitle: "Từ vựng",
-    grammarTitle: "Ngữ pháp",
-    flashTitle: "Flashcard",
-    quizTitle: "Quiz",
-    learnTitle: "Học tập",
-    addVocab: "Thêm từ vựng",
-    addGrammar: "Thêm ngữ pháp",
-    vocabList: "Danh sách từ vựng",
-    grammarList: "Danh sách ngữ pháp",
-    noVocab: "Chưa có từ nào.",
-    noGrammar: "Chưa có ngữ pháp nào.",
