@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 
 type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
 type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
 
 type VocabItem = {
   word: string;
@@ -37,9 +38,111 @@ const DEFAULT_GRAMMAR: GrammarItem[] = [
   { pattern: "있다 / 없다", meaning: "Có / Không có" },
 ];
 
+const texts = {
+  vi: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
+    beta: "Beta",
+    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
+    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
+    heroText:
+      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
+    start: "Bắt đầu học",
+    docs: "Xem tài liệu",
+    todayTitle: "Hôm nay học gì?",
+    todayText: "5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.",
+    todayProgress: "Tiến độ hôm nay",
+    home: "Trang chủ",
+    learn: "Học tập",
+    flash: "Flashcard",
+    quiz: "Quiz",
+    docsTab: "Tài liệu",
+    mainTitle: "Chức năng chính",
+    vocabTitle: "Từ vựng",
+    grammarTitle: "Ngữ pháp",
+    flashTitle: "Flashcard",
+    quizTitle: "Quiz",
+    docsTitle: "Tài liệu",
+    learnTitle: "Học tập",
+    addVocab: "Thêm từ vựng",
+    addGrammar: "Thêm ngữ pháp",
+    vocabList: "Danh sách từ vựng",
+    grammarList: "Danh sách ngữ pháp",
+    noVocab: "Chưa có từ nào.",
+    noGrammar: "Chưa có ngữ pháp nào.",
+    noFlash: "Chưa có từ nào để lật flashcard.",
+    flipHint: "Bấm để lật thẻ",
+    nextWord: "Từ tiếp theo",
+    noQuiz: "Thêm ít nhất 3 từ để bắt đầu quiz.",
+    quizScore: "Điểm hiện tại",
+    uploadDocs: "Tải tài liệu lên",
+    docHint: "Có thể upload PDF, ảnh hoặc file tài liệu học tập.",
+    docList: "Danh sách tài liệu",
+    noDocs: "Chưa có tài liệu nào.",
+    open: "Mở",
+    vocabPlaceholder: "Ví dụ: 학교",
+    meaningPlaceholder: "Ví dụ: Trường học",
+    grammarPatternPlaceholder: "Ví dụ: 은/는",
+    grammarMeaningPlaceholder: "Ví dụ: Chủ đề của câu",
+    addWordBtn: "➕ Thêm từ",
+    addGrammarBtn: "➕ Thêm ngữ pháp",
+  },
+  en: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Learn Korean in a simple way — vocabulary, grammar, flashcards, quizzes, and documents in one place.",
+    beta: "Beta",
+    heroTag: "✨ Learn in a simple, beautiful, and memorable way",
+    heroTitle: "Start learning Korean at your own pace.",
+    heroText:
+      "You can add new words, note grammar points, flip flashcards, take quizzes, and store study documents right inside the app.",
+    start: "Start learning",
+    docs: "View documents",
+    todayTitle: "What to study today?",
+    todayText: "5 new words + 2 grammar patterns + 1 short quiz.",
+    todayProgress: "Today’s progress",
+    home: "Home",
+    learn: "Learn",
+    flash: "Flashcard",
+    quiz: "Quiz",
+    docsTab: "Documents",
+    mainTitle: "Main features",
+    vocabTitle: "Vocabulary",
+    grammarTitle: "Grammar",
+    flashTitle: "Flashcard",
+    quizTitle: "Quiz",
+    docsTitle: "Documents",
+    learnTitle: "Learn",
+    addVocab: "Add vocabulary",
+    addGrammar: "Add grammar",
+    vocabList: "Vocabulary list",
+    grammarList: "Grammar list",
+    noVocab: "No words yet.",
+    noGrammar: "No grammar yet.",
+    noFlash: "No words yet for flashcards.",
+    flipHint: "Tap to flip card",
+    nextWord: "Next word",
+    noQuiz: "Add at least 3 words to start the quiz.",
+    quizScore: "Current score",
+    uploadDocs: "Upload documents",
+    docHint: "You can upload PDFs, images, or study files.",
+    docList: "Document list",
+    noDocs: "No documents yet.",
+    open: "Open",
+    vocabPlaceholder: "Example: 학교",
+    meaningPlaceholder: "Example: School",
+    grammarPatternPlaceholder: "Example: 은/는",
+    grammarMeaningPlaceholder: "Example: Topic marker",
+    addWordBtn: "➕ Add word",
+    addGrammarBtn: "➕ Add grammar",
+  },
+};
+
 export default function Page() {
   const [tab, setTab] = useState<TabKey>("home");
   const [learnTab, setLearnTab] = useState<LearnKey>("vocab");
+  const [language, setLanguage] = useState<LangKey>("vi");
 
   const [vocab, setVocab] = useState<VocabItem[]>(DEFAULT_VOCAB);
   const [grammar, setGrammar] = useState<GrammarItem[]>(DEFAULT_GRAMMAR);
@@ -61,9 +164,11 @@ export default function Page() {
   useEffect(() => {
     const savedVocab = localStorage.getItem("ainoi_vocab");
     const savedGrammar = localStorage.getItem("ainoi_grammar");
+    const savedLang = localStorage.getItem("ainoi_lang");
 
     if (savedVocab) setVocab(JSON.parse(savedVocab));
     if (savedGrammar) setGrammar(JSON.parse(savedGrammar));
+    if (savedLang === "vi" || savedLang === "en") setLanguage(savedLang);
   }, []);
 
   useEffect(() => {
@@ -74,21 +179,27 @@ export default function Page() {
     localStorage.setItem("ainoi_grammar", JSON.stringify(grammar));
   }, [grammar]);
 
+  useEffect(() => {
+    localStorage.setItem("ainoi_lang", language);
+  }, [language]);
+
+  const t = texts[language];
+
   const tabs = [
-    { key: "home" as const, label: "Trang chủ", icon: "🏠" },
-    { key: "learn" as const, label: "Học tập", icon: "📚" },
-    { key: "flash" as const, label: "Flashcard", icon: "🧠" },
-    { key: "quiz" as const, label: "Quiz", icon: "🎯" },
-    { key: "docs" as const, label: "Tài liệu", icon: "📂" },
+    { key: "home" as const, label: t.home, icon: "🏠" },
+    { key: "learn" as const, label: t.learn, icon: "📚" },
+    { key: "flash" as const, label: t.flash, icon: "🧠" },
+    { key: "quiz" as const, label: t.quiz, icon: "🎯" },
+    { key: "docs" as const, label: t.docsTab, icon: "📂" },
   ];
 
   const stats = useMemo(
     () => [
-      { label: "Từ vựng", value: vocab.length, icon: "📘" },
-      { label: "Ngữ pháp", value: grammar.length, icon: "✏️" },
-      { label: "Điểm quiz", value: score, icon: "⭐" },
+      { label: t.vocabTitle, value: vocab.length, icon: "📘" },
+      { label: t.grammarTitle, value: grammar.length, icon: "✏️" },
+      { label: t.quizScore, value: score, icon: "⭐" },
     ],
-    [vocab.length, grammar.length, score]
+    [vocab.length, grammar.length, score, t.vocabTitle, t.grammarTitle, t.quizScore]
   );
 
   const addVocab = () => {
@@ -143,9 +254,11 @@ export default function Page() {
 
     if (answer === currentQuiz.meaning) {
       setScore((prev) => prev + 1);
-      setQuizFeedback("✅ Chính xác!");
+      setQuizFeedback(language === "vi" ? "✅ Chính xác!" : "✅ Correct!");
     } else {
-      setQuizFeedback("❌ Chưa đúng, thử lại nhé!");
+      setQuizFeedback(
+        language === "vi" ? "❌ Chưa đúng, thử lại nhé!" : "❌ Not quite, try again!"
+      );
     }
 
     setTimeout(() => {
@@ -168,51 +281,68 @@ export default function Page() {
 
   return (
     <div style={styles.page}>
-      {/* TOP HERO */}
+      {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.brandBlock}>
           <div style={styles.brandIcon}>🌸</div>
           <div>
-            <h1 style={styles.brand}>ai-noi-hoc-tieng-han-khong-kho</h1>
-            <p style={styles.subtitle}>
-              Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.
-            </p>
+            <h1 style={styles.brand}>{t.title}</h1>
+            <p style={styles.subtitle}>{t.subtitle}</p>
           </div>
         </div>
 
-        <div style={styles.badge}>Beta</div>
+        <div style={styles.headerRight}>
+          <div style={styles.langSwitch}>
+            <button
+              onClick={() => setLanguage("vi")}
+              style={{
+                ...styles.langButton,
+                ...(language === "vi" ? styles.langButtonActive : {}),
+              }}
+            >
+              VI
+            </button>
+            <button
+              onClick={() => setLanguage("en")}
+              style={{
+                ...styles.langButton,
+                ...(language === "en" ? styles.langButtonActive : {}),
+              }}
+            >
+              EN
+            </button>
+          </div>
+
+          <div style={styles.badge}>{t.beta}</div>
+        </div>
       </header>
 
-      {/* HERO */}
-      <section style={styles.hero}>
-        <div style={styles.heroLeft}>
-          <div style={styles.heroTag}>✨ Học theo cách đơn giản, đẹp và dễ nhớ</div>
-          <h2 style={styles.heroTitle}>Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.</h2>
-          <p style={styles.heroText}>
-            Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.
-          </p>
+      {/* BANNER */}
+      <section style={styles.banner}>
+        <div style={styles.bannerOverlay}>
+          <div style={styles.bannerContent}>
+            <div style={styles.heroTag}>{t.heroTag}</div>
+            <h2 style={styles.heroTitle}>{t.heroTitle}</h2>
+            <p style={styles.heroText}>{t.heroText}</p>
 
-          <div style={styles.heroActions}>
-            <button style={styles.primaryButton} onClick={() => setTab("learn")}>
-              Bắt đầu học
-            </button>
-            <button style={styles.secondaryButton} onClick={() => setTab("docs")}>
-              Xem tài liệu
-            </button>
+            <div style={styles.heroActions}>
+              <button style={styles.primaryButton} onClick={() => setTab("learn")}>
+                {t.start}
+              </button>
+              <button style={styles.secondaryButton} onClick={() => setTab("docs")}>
+                {t.docs}
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div style={styles.heroRight}>
           <div style={styles.heroCard}>
-            <div style={styles.heroCardIcon}>🇰🇷</div>
-            <h3 style={styles.heroCardTitle}>Hôm nay học gì?</h3>
-            <p style={styles.heroCardText}>
-              5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.
-            </p>
+            <div style={styles.heroCardIcon}>🌸</div>
+            <h3 style={styles.heroCardTitle}>{t.todayTitle}</h3>
+            <p style={styles.heroCardText}>{t.todayText}</p>
 
             <div style={styles.progressWrap}>
               <div style={styles.progressLabel}>
-                <span>Tiến độ hôm nay</span>
+                <span>{t.todayProgress}</span>
                 <span>70%</span>
               </div>
               <div style={styles.progressBar}>
@@ -236,7 +366,7 @@ export default function Page() {
         ))}
       </section>
 
-      {/* TOP NAV */}
+      {/* NAV */}
       <nav style={styles.nav}>
         {tabs.map((item) => (
           <button
@@ -253,42 +383,50 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* CONTENT */}
+      {/* MAIN */}
       <main style={styles.main}>
         {tab === "home" && (
           <section style={styles.section}>
-            <h3 style={styles.sectionTitle}>Chức năng chính</h3>
+            <h3 style={styles.sectionTitle}>{t.mainTitle}</h3>
 
             <div style={styles.featureGrid}>
               <div style={styles.featureCard}>
                 <div style={styles.featureIcon}>📖</div>
-                <h4 style={styles.featureTitle}>Từ vựng</h4>
+                <h4 style={styles.featureTitle}>{t.vocabTitle}</h4>
                 <p style={styles.featureText}>
-                  Thêm từ mới, lưu lại và học theo danh sách riêng của bạn.
+                  {language === "vi"
+                    ? "Thêm từ mới, lưu lại và học theo danh sách riêng của bạn."
+                    : "Add new words, save them, and study from your own list."}
                 </p>
               </div>
 
               <div style={styles.featureCard}>
                 <div style={styles.featureIcon}>✏️</div>
-                <h4 style={styles.featureTitle}>Ngữ pháp</h4>
+                <h4 style={styles.featureTitle}>{t.grammarTitle}</h4>
                 <p style={styles.featureText}>
-                  Ghi chú các mẫu câu và ngữ pháp quan trọng bằng tiếng Việt dễ hiểu.
+                  {language === "vi"
+                    ? "Ghi chú các mẫu câu và ngữ pháp quan trọng bằng tiếng Việt dễ hiểu."
+                    : "Note important sentence patterns and grammar in simple English."}
                 </p>
               </div>
 
               <div style={styles.featureCard}>
                 <div style={styles.featureIcon}>🃏</div>
-                <h4 style={styles.featureTitle}>Flashcard</h4>
+                <h4 style={styles.featureTitle}>{t.flashTitle}</h4>
                 <p style={styles.featureText}>
-                  Lật thẻ nhanh để ghi nhớ từ vựng và nghĩa dễ dàng hơn.
+                  {language === "vi"
+                    ? "Lật thẻ nhanh để ghi nhớ từ vựng và nghĩa dễ dàng hơn."
+                    : "Flip cards to memorize words and meanings more easily."}
                 </p>
               </div>
 
               <div style={styles.featureCard}>
                 <div style={styles.featureIcon}>🎯</div>
-                <h4 style={styles.featureTitle}>Quiz</h4>
+                <h4 style={styles.featureTitle}>{t.quizTitle}</h4>
                 <p style={styles.featureText}>
-                  Làm bài kiểm tra ngắn để ôn tập và kiểm tra trí nhớ.
+                  {language === "vi"
+                    ? "Làm bài kiểm tra ngắn để ôn tập và kiểm tra trí nhớ."
+                    : "Take short quizzes to review and test your memory."}
                 </p>
               </div>
             </div>
@@ -297,7 +435,7 @@ export default function Page() {
 
         {tab === "learn" && (
           <section style={styles.section}>
-            <h3 style={styles.sectionTitle}>Học tập</h3>
+            <h3 style={styles.sectionTitle}>{t.learnTitle}</h3>
 
             <div style={styles.subNav}>
               <button
@@ -307,7 +445,7 @@ export default function Page() {
                   ...(learnTab === "vocab" ? styles.subButtonActive : {}),
                 }}
               >
-                📖 Từ vựng
+                📖 {t.vocabTitle}
               </button>
               <button
                 onClick={() => setLearnTab("grammar")}
@@ -316,39 +454,39 @@ export default function Page() {
                   ...(learnTab === "grammar" ? styles.subButtonActive : {}),
                 }}
               >
-                ✏️ Ngữ pháp
+                ✏️ {t.grammarTitle}
               </button>
             </div>
 
             {learnTab === "vocab" && (
               <div style={styles.learnLayout}>
                 <div style={styles.formCard}>
-                  <h4 style={styles.contentTitle}>Thêm từ vựng</h4>
+                  <h4 style={styles.contentTitle}>{t.addVocab}</h4>
 
                   <input
-                    placeholder="Ví dụ: 학교"
+                    placeholder={t.vocabPlaceholder}
                     value={word}
                     onChange={(e) => setWord(e.target.value)}
                     style={styles.input}
                   />
 
                   <input
-                    placeholder="Ví dụ: Trường học"
+                    placeholder={t.meaningPlaceholder}
                     value={meaning}
                     onChange={(e) => setMeaning(e.target.value)}
                     style={styles.input}
                   />
 
                   <button onClick={addVocab} style={styles.primaryButton}>
-                    ➕ Thêm từ
+                    {t.addWordBtn}
                   </button>
                 </div>
 
                 <div style={styles.listCard}>
-                  <h4 style={styles.contentTitle}>Danh sách từ vựng</h4>
+                  <h4 style={styles.contentTitle}>{t.vocabList}</h4>
 
                   {vocab.length === 0 ? (
-                    <p style={styles.emptyText}>Chưa có từ nào.</p>
+                    <p style={styles.emptyText}>{t.noVocab}</p>
                   ) : (
                     vocab.map((item, index) => (
                       <div key={`${item.word}-${index}`} style={styles.listItem}>
@@ -366,32 +504,32 @@ export default function Page() {
             {learnTab === "grammar" && (
               <div style={styles.learnLayout}>
                 <div style={styles.formCard}>
-                  <h4 style={styles.contentTitle}>Thêm ngữ pháp</h4>
+                  <h4 style={styles.contentTitle}>{t.addGrammar}</h4>
 
                   <input
-                    placeholder="Ví dụ: 은/는"
+                    placeholder={t.grammarPatternPlaceholder}
                     value={grammarPattern}
                     onChange={(e) => setGrammarPattern(e.target.value)}
                     style={styles.input}
                   />
 
                   <input
-                    placeholder="Ví dụ: Chủ đề của câu"
+                    placeholder={t.grammarMeaningPlaceholder}
                     value={grammarMeaning}
                     onChange={(e) => setGrammarMeaning(e.target.value)}
                     style={styles.input}
                   />
 
                   <button onClick={addGrammar} style={styles.primaryButton}>
-                    ➕ Thêm ngữ pháp
+                    {t.addGrammarBtn}
                   </button>
                 </div>
 
                 <div style={styles.listCard}>
-                  <h4 style={styles.contentTitle}>Danh sách ngữ pháp</h4>
+                  <h4 style={styles.contentTitle}>{t.grammarList}</h4>
 
                   {grammar.length === 0 ? (
-                    <p style={styles.emptyText}>Chưa có ngữ pháp nào.</p>
+                    <p style={styles.emptyText}>{t.noGrammar}</p>
                   ) : (
                     grammar.map((item, index) => (
                       <div key={`${item.pattern}-${index}`} style={styles.listItem}>
@@ -410,13 +548,13 @@ export default function Page() {
 
         {tab === "flash" && (
           <section style={styles.section}>
-            <h3 style={styles.sectionTitle}>Flashcard</h3>
+            <h3 style={styles.sectionTitle}>{t.flashTitle}</h3>
 
             {vocab.length === 0 ? (
-              <p style={styles.emptyText}>Chưa có từ nào để lật flashcard.</p>
+              <p style={styles.emptyText}>{t.noFlash}</p>
             ) : (
               <div style={styles.flashCard} onClick={() => setFlip((prev) => !prev)}>
-                <div style={styles.flashHint}>Bấm để lật thẻ</div>
+                <div style={styles.flashHint}>{t.flipHint}</div>
                 <div style={styles.flashContent}>
                   {flip ? currentFlash?.meaning : currentFlash?.word}
                 </div>
@@ -430,7 +568,7 @@ export default function Page() {
                       setFlip(false);
                     }}
                   >
-                    Từ tiếp theo
+                    {t.nextWord}
                   </button>
                 </div>
               </div>
@@ -440,10 +578,10 @@ export default function Page() {
 
         {tab === "quiz" && (
           <section style={styles.section}>
-            <h3 style={styles.sectionTitle}>Quiz</h3>
+            <h3 style={styles.sectionTitle}>{t.quizTitle}</h3>
 
             {vocab.length < 3 || !currentQuiz ? (
-              <p style={styles.emptyText}>Thêm ít nhất 3 từ để bắt đầu quiz.</p>
+              <p style={styles.emptyText}>{t.noQuiz}</p>
             ) : (
               <div style={styles.quizCard}>
                 <div style={styles.quizQuestion}>{currentQuiz.word}</div>
@@ -461,7 +599,9 @@ export default function Page() {
                 </div>
 
                 {quizFeedback && <div style={styles.quizFeedback}>{quizFeedback}</div>}
-                <div style={styles.quizScore}>Điểm hiện tại: {score}</div>
+                <div style={styles.quizScore}>
+                  {t.quizScore}: {score}
+                </div>
               </div>
             )}
           </section>
@@ -469,27 +609,25 @@ export default function Page() {
 
         {tab === "docs" && (
           <section style={styles.section}>
-            <h3 style={styles.sectionTitle}>Tài liệu</h3>
+            <h3 style={styles.sectionTitle}>{t.docsTab}</h3>
 
             <div style={styles.formCard}>
-              <h4 style={styles.contentTitle}>Tải tài liệu lên</h4>
+              <h4 style={styles.contentTitle}>{t.uploadDocs}</h4>
               <input type="file" multiple onChange={handleUploadDocs} style={styles.fileInput} />
-              <p style={styles.helperText}>
-                Có thể upload PDF, ảnh hoặc file tài liệu học tập.
-              </p>
+              <p style={styles.helperText}>{t.docHint}</p>
             </div>
 
             <div style={styles.listCard}>
-              <h4 style={styles.contentTitle}>Danh sách tài liệu</h4>
+              <h4 style={styles.contentTitle}>{t.docList}</h4>
 
               {docs.length === 0 ? (
-                <p style={styles.emptyText}>Chưa có tài liệu nào.</p>
+                <p style={styles.emptyText}>{t.noDocs}</p>
               ) : (
                 docs.map((doc, index) => (
                   <div key={`${doc.name}-${index}`} style={styles.docItem}>
                     <span>📄 {doc.name}</span>
                     <a href={doc.url} target="_blank" rel="noreferrer" style={styles.docLink}>
-                      Mở
+                      {t.open}
                     </a>
                   </div>
                 ))
@@ -498,23 +636,6 @@ export default function Page() {
           </section>
         )}
       </main>
-
-      {/* MOBILE BOTTOM NAV */}
-      <div style={styles.mobileBottomNav}>
-        {tabs.map((item) => (
-          <button
-            key={item.key}
-            onClick={() => setTab(item.key)}
-            style={{
-              ...styles.mobileNavButton,
-              ...(tab === item.key ? styles.mobileNavButtonActive : {}),
-            }}
-          >
-            <span style={styles.mobileNavIcon}>{item.icon}</span>
-            <span style={styles.mobileNavLabel}>{item.label}</span>
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
@@ -538,7 +659,7 @@ const styles: Record<string, CSSProperties> = {
     justifyContent: "space-between",
     alignItems: "flex-start",
     gap: "16px",
-    marginBottom: "28px",
+    marginBottom: "20px",
   },
 
   brandBlock: {
@@ -548,14 +669,14 @@ const styles: Record<string, CSSProperties> = {
   },
 
   brandIcon: {
-    width: "48px",
-    height: "48px",
-    borderRadius: "16px",
+    width: "52px",
+    height: "52px",
+    borderRadius: "18px",
     background: "linear-gradient(135deg, #22c55e, #86efac)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "24px",
+    fontSize: "26px",
     boxShadow: "0 10px 24px rgba(34, 197, 94, 0.18)",
     flexShrink: 0,
   },
@@ -579,6 +700,36 @@ const styles: Record<string, CSSProperties> = {
     maxWidth: "760px",
   },
 
+  headerRight: {
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+  },
+
+  langSwitch: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "center",
+  },
+
+  langButton: {
+    border: "1px solid #d1d5db",
+    background: "#ffffff",
+    color: "#374151",
+    borderRadius: "999px",
+    padding: "8px 14px",
+    fontWeight: 800,
+    cursor: "pointer",
+  },
+
+  langButtonActive: {
+    background: "#dcfce7",
+    color: "#166534",
+    borderColor: "#bbf7d0",
+  },
+
   badge: {
     background: "#dcfce7",
     color: "#166534",
@@ -590,57 +741,30 @@ const styles: Record<string, CSSProperties> = {
     border: "1px solid #bbf7d0",
   },
 
-  hero: {
+  banner: {
+    borderRadius: "30px",
+    overflow: "hidden",
+    marginBottom: "24px",
+    backgroundImage:
+      "linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,253,244,0.96)), url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    border: "1px solid #eef2f7",
+    boxShadow: "0 16px 40px rgba(15, 23, 42, 0.08)",
+  },
+
+  bannerOverlay: {
     display: "grid",
     gridTemplateColumns: "1.4fr 1fr",
     gap: "20px",
-    alignItems: "stretch",
-    marginBottom: "24px",
-  },
-
-  heroLeft: {
-    background:
-      "linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,253,244,0.96))",
-    borderRadius: "28px",
     padding: "30px",
-    boxShadow: "0 14px 36px rgba(15, 23, 42, 0.07)",
-    border: "1px solid #eef2f7",
-    backdropFilter: "blur(8px)",
+    backdropFilter: "blur(4px)",
   },
 
-  heroRight: {
-    display: "flex",
-  },
-
-  heroCard: {
-    width: "100%",
-    background: "linear-gradient(135deg, #dcfce7, #f0fdf4)",
-    borderRadius: "28px",
-    padding: "28px",
-    boxShadow: "0 14px 36px rgba(22, 163, 74, 0.10)",
-    border: "1px solid #bbf7d0",
+  bannerContent: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-  },
-
-  heroCardIcon: {
-    fontSize: "36px",
-    marginBottom: "12px",
-  },
-
-  heroCardTitle: {
-    margin: 0,
-    fontSize: "20px",
-    fontWeight: 900,
-    color: "#14532d",
-  },
-
-  heroCardText: {
-    marginTop: "10px",
-    marginBottom: 0,
-    color: "#166534",
-    lineHeight: 1.7,
   },
 
   heroTag: {
@@ -654,6 +778,7 @@ const styles: Record<string, CSSProperties> = {
     fontSize: "13px",
     fontWeight: 800,
     marginBottom: "14px",
+    width: "fit-content",
   },
 
   heroTitle: {
@@ -689,7 +814,6 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 800,
     cursor: "pointer",
     boxShadow: "0 10px 22px rgba(34, 197, 94, 0.24)",
-    transition: "transform 0.2s ease, box-shadow 0.2s ease",
   },
 
   secondaryButton: {
@@ -700,6 +824,37 @@ const styles: Record<string, CSSProperties> = {
     padding: "12px 18px",
     fontWeight: 800,
     cursor: "pointer",
+  },
+
+  heroCard: {
+    width: "100%",
+    background: "linear-gradient(135deg, #dcfce7, #f0fdf4)",
+    borderRadius: "28px",
+    padding: "28px",
+    boxShadow: "0 14px 36px rgba(22, 163, 74, 0.10)",
+    border: "1px solid #bbf7d0",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+
+  heroCardIcon: {
+    fontSize: "42px",
+    marginBottom: "12px",
+  },
+
+  heroCardTitle: {
+    margin: 0,
+    fontSize: "20px",
+    fontWeight: 900,
+    color: "#14532d",
+  },
+
+  heroCardText: {
+    marginTop: "10px",
+    marginBottom: 0,
+    color: "#166534",
+    lineHeight: 1.7,
   },
 
   progressWrap: {
@@ -1048,25 +1203,5 @@ const styles: Record<string, CSSProperties> = {
     color: "#16a34a",
     fontWeight: 800,
     textDecoration: "none",
-  },
-
-  mobileBottomNav: {
-    display: "none",
-  },
-
-  mobileNavButton: {
-    display: "none",
-  },
-
-  mobileNavButtonActive: {
-    display: "none",
-  },
-
-  mobileNavIcon: {
-    display: "none",
-  },
-
-  mobileNavLabel: {
-    display: "none",
   },
 };
