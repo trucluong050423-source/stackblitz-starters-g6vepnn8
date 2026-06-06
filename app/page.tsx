@@ -58,7 +58,6 @@ export default function Page() {
   const [quizFeedback, setQuizFeedback] = useState<string | null>(null);
   const [score, setScore] = useState(0);
 
-  // Load saved data
   useEffect(() => {
     const savedVocab = localStorage.getItem("ainoi_vocab");
     const savedGrammar = localStorage.getItem("ainoi_grammar");
@@ -67,7 +66,6 @@ export default function Page() {
     if (savedGrammar) setGrammar(JSON.parse(savedGrammar));
   }, []);
 
-  // Save data
   useEffect(() => {
     localStorage.setItem("ainoi_vocab", JSON.stringify(vocab));
   }, [vocab]);
@@ -170,22 +168,28 @@ export default function Page() {
 
   return (
     <div style={styles.page}>
+      {/* TOP HERO */}
       <header style={styles.header}>
-        <div>
-          <h1 style={styles.brand}>ai-noi-hoc-tieng-han-khong-kho 🌸</h1>
-          <p style={styles.subtitle}>
-            Website học tiếng Hàn riêng của bạn — có từ vựng, ngữ pháp, flashcard, quiz và tài liệu.
-          </p>
+        <div style={styles.brandBlock}>
+          <div style={styles.brandIcon}>🌸</div>
+          <div>
+            <h1 style={styles.brand}>ai-noi-hoc-tieng-han-khong-kho</h1>
+            <p style={styles.subtitle}>
+              Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.
+            </p>
+          </div>
         </div>
 
         <div style={styles.badge}>Beta</div>
       </header>
 
+      {/* HERO */}
       <section style={styles.hero}>
         <div style={styles.heroLeft}>
-          <h2 style={styles.heroTitle}>Học tiếng Hàn theo cách dễ nhớ hơn.</h2>
+          <div style={styles.heroTag}>✨ Học theo cách đơn giản, đẹp và dễ nhớ</div>
+          <h2 style={styles.heroTitle}>Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.</h2>
           <p style={styles.heroText}>
-            Tự thêm từ mới, ghi nhớ ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập trong một nơi.
+            Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.
           </p>
 
           <div style={styles.heroActions}>
@@ -205,10 +209,21 @@ export default function Page() {
             <p style={styles.heroCardText}>
               5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.
             </p>
+
+            <div style={styles.progressWrap}>
+              <div style={styles.progressLabel}>
+                <span>Tiến độ hôm nay</span>
+                <span>70%</span>
+              </div>
+              <div style={styles.progressBar}>
+                <div style={styles.progressFill} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* STATS */}
       <section style={styles.statsGrid}>
         {stats.map((item) => (
           <div key={item.label} style={styles.statCard}>
@@ -221,6 +236,7 @@ export default function Page() {
         ))}
       </section>
 
+      {/* TOP NAV */}
       <nav style={styles.nav}>
         {tabs.map((item) => (
           <button
@@ -237,6 +253,7 @@ export default function Page() {
         ))}
       </nav>
 
+      {/* CONTENT */}
       <main style={styles.main}>
         {tab === "home" && (
           <section style={styles.section}>
@@ -481,6 +498,23 @@ export default function Page() {
           </section>
         )}
       </main>
+
+      {/* MOBILE BOTTOM NAV */}
+      <div style={styles.mobileBottomNav}>
+        {tabs.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setTab(item.key)}
+            style={{
+              ...styles.mobileNavButton,
+              ...(tab === item.key ? styles.mobileNavButtonActive : {}),
+            }}
+          >
+            <span style={styles.mobileNavIcon}>{item.icon}</span>
+            <span style={styles.mobileNavLabel}>{item.label}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -488,9 +522,11 @@ export default function Page() {
 const styles: Record<string, CSSProperties> = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(180deg, #f7fff7 0%, #ffffff 40%, #f5f7fb 100%)",
+    background:
+      "radial-gradient(circle at top left, #ecfdf5 0%, #ffffff 35%, #f5f7fb 100%)",
     color: "#1f2937",
     padding: "24px",
+    paddingBottom: "96px",
     fontFamily:
       'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     maxWidth: "1100px",
@@ -505,13 +541,33 @@ const styles: Record<string, CSSProperties> = {
     marginBottom: "28px",
   },
 
+  brandBlock: {
+    display: "flex",
+    gap: "14px",
+    alignItems: "flex-start",
+  },
+
+  brandIcon: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "16px",
+    background: "linear-gradient(135deg, #22c55e, #86efac)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "24px",
+    boxShadow: "0 10px 24px rgba(34, 197, 94, 0.18)",
+    flexShrink: 0,
+  },
+
   brand: {
     margin: 0,
     fontSize: "28px",
-    fontWeight: 800,
-    lineHeight: 1.2,
-    color: "#16a34a",
-    letterSpacing: "-0.02em",
+    fontWeight: 900,
+    lineHeight: 1.15,
+    color: "#15803d",
+    letterSpacing: "-0.03em",
+    textTransform: "lowercase",
   },
 
   subtitle: {
@@ -519,8 +575,8 @@ const styles: Record<string, CSSProperties> = {
     marginBottom: 0,
     color: "#6b7280",
     fontSize: "15px",
-    lineHeight: 1.6,
-    maxWidth: "720px",
+    lineHeight: 1.7,
+    maxWidth: "760px",
   },
 
   badge: {
@@ -529,8 +585,9 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: "999px",
     padding: "8px 14px",
     fontSize: "13px",
-    fontWeight: 700,
+    fontWeight: 800,
     whiteSpace: "nowrap",
+    border: "1px solid #bbf7d0",
   },
 
   hero: {
@@ -542,11 +599,13 @@ const styles: Record<string, CSSProperties> = {
   },
 
   heroLeft: {
-    background: "#ffffff",
-    borderRadius: "24px",
-    padding: "28px",
-    boxShadow: "0 12px 30px rgba(15, 23, 42, 0.06)",
+    background:
+      "linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,253,244,0.96))",
+    borderRadius: "28px",
+    padding: "30px",
+    boxShadow: "0 14px 36px rgba(15, 23, 42, 0.07)",
     border: "1px solid #eef2f7",
+    backdropFilter: "blur(8px)",
   },
 
   heroRight: {
@@ -556,9 +615,9 @@ const styles: Record<string, CSSProperties> = {
   heroCard: {
     width: "100%",
     background: "linear-gradient(135deg, #dcfce7, #f0fdf4)",
-    borderRadius: "24px",
+    borderRadius: "28px",
     padding: "28px",
-    boxShadow: "0 12px 30px rgba(22, 163, 74, 0.10)",
+    boxShadow: "0 14px 36px rgba(22, 163, 74, 0.10)",
     border: "1px solid #bbf7d0",
     display: "flex",
     flexDirection: "column",
@@ -573,7 +632,7 @@ const styles: Record<string, CSSProperties> = {
   heroCardTitle: {
     margin: 0,
     fontSize: "20px",
-    fontWeight: 800,
+    fontWeight: 900,
     color: "#14532d",
   },
 
@@ -584,22 +643,35 @@ const styles: Record<string, CSSProperties> = {
     lineHeight: 1.7,
   },
 
+  heroTag: {
+    display: "inline-flex",
+    alignItems: "center",
+    background: "#f0fdf4",
+    border: "1px solid #bbf7d0",
+    color: "#166534",
+    borderRadius: "999px",
+    padding: "8px 14px",
+    fontSize: "13px",
+    fontWeight: 800,
+    marginBottom: "14px",
+  },
+
   heroTitle: {
     margin: 0,
-    fontSize: "34px",
-    lineHeight: 1.2,
+    fontSize: "36px",
+    lineHeight: 1.15,
     fontWeight: 900,
     color: "#111827",
-    letterSpacing: "-0.03em",
+    letterSpacing: "-0.04em",
   },
 
   heroText: {
     marginTop: "14px",
-    marginBottom: "20px",
+    marginBottom: "22px",
     fontSize: "16px",
     lineHeight: 1.8,
     color: "#6b7280",
-    maxWidth: "620px",
+    maxWidth: "640px",
   },
 
   heroActions: {
@@ -609,24 +681,52 @@ const styles: Record<string, CSSProperties> = {
   },
 
   primaryButton: {
-    background: "#22c55e",
+    background: "linear-gradient(135deg, #22c55e, #16a34a)",
     color: "white",
     border: "none",
-    borderRadius: "14px",
+    borderRadius: "16px",
     padding: "12px 18px",
-    fontWeight: 700,
+    fontWeight: 800,
     cursor: "pointer",
-    boxShadow: "0 8px 18px rgba(34, 197, 94, 0.22)",
+    boxShadow: "0 10px 22px rgba(34, 197, 94, 0.24)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
   },
 
   secondaryButton: {
     background: "white",
     color: "#111827",
     border: "1px solid #d1d5db",
-    borderRadius: "14px",
+    borderRadius: "16px",
     padding: "12px 18px",
-    fontWeight: 700,
+    fontWeight: 800,
     cursor: "pointer",
+  },
+
+  progressWrap: {
+    marginTop: "22px",
+  },
+
+  progressLabel: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: "13px",
+    color: "#166534",
+    marginBottom: "8px",
+    fontWeight: 700,
+  },
+
+  progressBar: {
+    height: "12px",
+    borderRadius: "999px",
+    background: "#d1fae5",
+    overflow: "hidden",
+  },
+
+  progressFill: {
+    width: "70%",
+    height: "100%",
+    borderRadius: "999px",
+    background: "linear-gradient(90deg, #22c55e, #16a34a)",
   },
 
   statsGrid: {
@@ -638,7 +738,7 @@ const styles: Record<string, CSSProperties> = {
 
   statCard: {
     background: "#ffffff",
-    borderRadius: "20px",
+    borderRadius: "22px",
     padding: "18px",
     boxShadow: "0 10px 24px rgba(15, 23, 42, 0.05)",
     border: "1px solid #eef2f7",
@@ -670,7 +770,7 @@ const styles: Record<string, CSSProperties> = {
     marginBottom: "24px",
     background: "#ffffff",
     padding: "10px",
-    borderRadius: "18px",
+    borderRadius: "20px",
     border: "1px solid #eef2f7",
     boxShadow: "0 10px 24px rgba(15, 23, 42, 0.04)",
   },
@@ -683,9 +783,9 @@ const styles: Record<string, CSSProperties> = {
     border: "none",
     background: "transparent",
     color: "#6b7280",
-    fontWeight: 700,
+    fontWeight: 800,
     padding: "10px 8px",
-    borderRadius: "14px",
+    borderRadius: "16px",
     cursor: "pointer",
     fontSize: "13px",
   },
@@ -707,9 +807,9 @@ const styles: Record<string, CSSProperties> = {
 
   section: {
     background: "#ffffff",
-    borderRadius: "24px",
-    padding: "24px",
-    boxShadow: "0 12px 30px rgba(15, 23, 42, 0.05)",
+    borderRadius: "28px",
+    padding: "26px",
+    boxShadow: "0 14px 34px rgba(15, 23, 42, 0.05)",
     border: "1px solid #eef2f7",
   },
 
@@ -717,8 +817,9 @@ const styles: Record<string, CSSProperties> = {
     margin: 0,
     marginBottom: "16px",
     fontSize: "22px",
-    fontWeight: 800,
+    fontWeight: 900,
     color: "#111827",
+    letterSpacing: "-0.02em",
   },
 
   featureGrid: {
@@ -728,21 +829,22 @@ const styles: Record<string, CSSProperties> = {
   },
 
   featureCard: {
-    background: "#f9fafb",
-    borderRadius: "18px",
+    background: "linear-gradient(180deg, #f9fafb, #ffffff)",
+    borderRadius: "20px",
     padding: "18px",
     border: "1px solid #eef2f7",
+    boxShadow: "0 8px 18px rgba(15, 23, 42, 0.03)",
   },
 
   featureIcon: {
-    fontSize: "26px",
+    fontSize: "28px",
     marginBottom: "10px",
   },
 
   featureTitle: {
     margin: 0,
     fontSize: "18px",
-    fontWeight: 800,
+    fontWeight: 900,
     color: "#111827",
   },
 
@@ -767,7 +869,7 @@ const styles: Record<string, CSSProperties> = {
     color: "#374151",
     borderRadius: "14px",
     padding: "10px 16px",
-    fontWeight: 700,
+    fontWeight: 800,
     cursor: "pointer",
   },
 
@@ -785,14 +887,14 @@ const styles: Record<string, CSSProperties> = {
 
   formCard: {
     background: "#f9fafb",
-    borderRadius: "18px",
+    borderRadius: "20px",
     padding: "18px",
     border: "1px solid #eef2f7",
   },
 
   listCard: {
     background: "#f9fafb",
-    borderRadius: "18px",
+    borderRadius: "20px",
     padding: "18px",
     border: "1px solid #eef2f7",
   },
@@ -801,14 +903,14 @@ const styles: Record<string, CSSProperties> = {
     margin: 0,
     marginBottom: "12px",
     fontSize: "18px",
-    fontWeight: 800,
+    fontWeight: 900,
     color: "#111827",
   },
 
   input: {
     width: "100%",
     border: "1px solid #d1d5db",
-    borderRadius: "12px",
+    borderRadius: "14px",
     padding: "12px 14px",
     marginBottom: "10px",
     fontSize: "14px",
@@ -824,13 +926,14 @@ const styles: Record<string, CSSProperties> = {
   listItem: {
     background: "#ffffff",
     border: "1px solid #eef2f7",
-    borderRadius: "14px",
+    borderRadius: "16px",
     padding: "14px",
     marginBottom: "10px",
+    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
   },
 
   listWord: {
-    fontWeight: 800,
+    fontWeight: 900,
     fontSize: "16px",
     color: "#111827",
   },
@@ -844,11 +947,11 @@ const styles: Record<string, CSSProperties> = {
   flashCard: {
     background: "linear-gradient(135deg, #ecfdf5, #ffffff)",
     border: "1px solid #bbf7d0",
-    borderRadius: "24px",
-    padding: "32px",
+    borderRadius: "28px",
+    padding: "34px",
     textAlign: "center",
     cursor: "pointer",
-    boxShadow: "0 12px 30px rgba(22, 163, 74, 0.10)",
+    boxShadow: "0 14px 34px rgba(22, 163, 74, 0.10)",
   },
 
   flashHint: {
@@ -858,10 +961,10 @@ const styles: Record<string, CSSProperties> = {
   },
 
   flashContent: {
-    fontSize: "34px",
+    fontSize: "36px",
     fontWeight: 900,
     color: "#111827",
-    minHeight: "56px",
+    minHeight: "60px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -873,17 +976,18 @@ const styles: Record<string, CSSProperties> = {
 
   quizCard: {
     background: "#f9fafb",
-    borderRadius: "18px",
+    borderRadius: "20px",
     padding: "18px",
     border: "1px solid #eef2f7",
   },
 
   quizQuestion: {
-    fontSize: "26px",
+    fontSize: "28px",
     fontWeight: 900,
     color: "#111827",
     textAlign: "center",
     marginBottom: "18px",
+    letterSpacing: "-0.02em",
   },
 
   quizOptions: {
@@ -895,15 +999,16 @@ const styles: Record<string, CSSProperties> = {
     border: "1px solid #d1d5db",
     background: "#ffffff",
     padding: "14px",
-    borderRadius: "14px",
-    fontWeight: 700,
+    borderRadius: "16px",
+    fontWeight: 800,
     cursor: "pointer",
     textAlign: "left",
+    boxShadow: "0 4px 10px rgba(15, 23, 42, 0.03)",
   },
 
   quizFeedback: {
     marginTop: "14px",
-    fontWeight: 800,
+    fontWeight: 900,
     color: "#166534",
     textAlign: "center",
   },
@@ -929,18 +1034,39 @@ const styles: Record<string, CSSProperties> = {
   docItem: {
     background: "#ffffff",
     border: "1px solid #eef2f7",
-    borderRadius: "14px",
+    borderRadius: "16px",
     padding: "14px",
     marginBottom: "10px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     gap: "12px",
+    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
   },
 
   docLink: {
     color: "#16a34a",
-    fontWeight: 700,
+    fontWeight: 800,
     textDecoration: "none",
+  },
+
+  mobileBottomNav: {
+    display: "none",
+  },
+
+  mobileNavButton: {
+    display: "none",
+  },
+
+  mobileNavButtonActive: {
+    display: "none",
+  },
+
+  mobileNavIcon: {
+    display: "none",
+  },
+
+  mobileNavLabel: {
+    display: "none",
   },
 };
