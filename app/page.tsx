@@ -1,77 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
-  pattern: string;
-  meaning: string;
-};
-
-type DocItem = {
-  name: string;
-  url: string;
-};
-
-const DEFAULT_VOCAB: VocabItem[] = [
-  { word: "안녕하세요", meaning: "Xin chào" },
-  { word: "감사합니다", meaning: "Cảm ơn" },
-  { word: "학교", meaning: "Trường học" },
-  { word: "학생", meaning: "Học sinh" },
-  { word: "선생님", meaning: "Giáo viên" },
-];
-
-const DEFAULT_GRAMMAR: GrammarItem[] = [
-  { pattern: "은/는", meaning: "Chủ đề của câu" },
-  { pattern: "이/가", meaning: "Chủ ngữ" },
-  { pattern: "을/를", meaning: "Tân ngữ" },
-  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
-  { pattern: "있다 / 없다", meaning: "Có / Không có" },
-];
-
-const texts = {
-  vi: {
-    title: "ai-noi-hoc-tieng-han-khong-kho",
-    subtitle:
-      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
-    login: "Login",
-    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
-    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
-    heroText:
-      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
-    start: "Bắt đầu học",
-    docs: "Xem tài liệu",
-    todayTitle: "Hôm nay học gì?",
-    todayText: "5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.",
-    todayProgress: "Tiến độ hôm nay",
-    home: "Trang chủ",
-    learn: "Học tập",
-    flash: "Flashcard",
-    quiz: "Quiz",
-    docsTab: "Tài liệu",
-    mainTitle: "Chức năng chính",
-    vocabTitle: "Từ vựng",
-    grammarTitle: "Ngữ pháp",
-    flashTitle: "Flashcard",
-    quizTitle: "Quiz",
-    docsTitle: "Tài liệu",
-    learnTitle: "Học tập",
-    addVocab: "Thêm từ vựng",
-    addGrammar: "Thêm ngữ pháp",
-    vocabList: "Danh sách từ vựng",
-    grammarList: "Danh sách ngữ pháp",
-    noVocab: "Chưa có từ nào.",
-    noGrammar: "Chưa có ngữ pháp nào.",
-    noFlash: "Chưa có từ nào để lật flashcard.",
+import type: "Chưa có từ nào để lật flashcard.",import type { CSSProperties } from "react";
     flipHint: "Bấm để lật thẻ",
     nextWord: "Từ tiếp theo",
     noQuiz: "Thêm ít nhất 3 từ để bắt đầu quiz.",
@@ -112,7 +42,6 @@ const texts = {
     grammarTitle: "Grammar",
     flashTitle: "Flashcard",
     quizTitle: "Quiz",
-    docsTitle: "Documents",
     learnTitle: "Learn",
     addVocab: "Add vocabulary",
     addGrammar: "Add grammar",
@@ -279,7 +208,6 @@ export default function Page() {
     setDocs((prev) => [...prev, ...newDocs]);
   };
 
-  // Decorative blossom icons floating softly in the background
   const blossoms = [
     { top: "6%", left: "4%", size: 56, opacity: 0.10, rotate: -12 },
     { top: "14%", right: "6%", size: 44, opacity: 0.08, rotate: 18 },
@@ -291,7 +219,6 @@ export default function Page() {
 
   return (
     <div style={styles.page}>
-      {/* soft blossom background */}
       <div style={styles.bgLayer} aria-hidden="true">
         {blossoms.map((b, i) => (
           <div
@@ -312,7 +239,6 @@ export default function Page() {
         ))}
       </div>
 
-      {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.brandBlock}>
           <div style={styles.brandIcon}>🌸</div>
@@ -348,7 +274,6 @@ export default function Page() {
         </div>
       </header>
 
-      {/* BANNER */}
       <section style={styles.banner}>
         <div style={styles.bannerOverlay}>
           <div style={styles.bannerContent}>
@@ -384,7 +309,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* STATS */}
       <section style={styles.statsGrid}>
         {stats.map((item) => (
           <div key={item.label} style={styles.statCard}>
@@ -397,7 +321,6 @@ export default function Page() {
         ))}
       </section>
 
-      {/* NAV */}
       <nav style={styles.nav}>
         {tabs.map((item) => (
           <button
@@ -414,7 +337,6 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* MAIN CONTENT */}
       <main style={styles.main}>
         {tab === "home" && (
           <section style={styles.section}>
@@ -657,7 +579,7 @@ export default function Page() {
                 docs.map((doc, index) => (
                   <div key={`${doc.name}-${index}`} style={styles.docItem}>
                     <span>📄 {doc.name}</span>
-                    {doc.url}
+                    <a href={doc.url} target="_blank" rel="noreferrer" style={styles.docLink}>
                       {t.open}
                     </a>
                   </div>
@@ -1263,3 +1185,71 @@ const styles: Record<string, CSSProperties> = {
     textDecoration: "none",
   },
 };
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
+type GrammarItem = {
+  pattern: string;
+  meaning: string;
+};
+
+type DocItem = {
+  name: string;
+  url: string;
+};
+
+const DEFAULT_VOCAB: VocabItem[] = [
+  { word: "안녕하세요", meaning: "Xin chào" },
+  { word: "감사합니다", meaning: "Cảm ơn" },
+  { word: "학교", meaning: "Trường học" },
+  { word: "학생", meaning: "Học sinh" },
+  { word: "선생님", meaning: "Giáo viên" },
+];
+
+const DEFAULT_GRAMMAR: GrammarItem[] = [
+  { pattern: "은/는", meaning: "Chủ đề của câu" },
+  { pattern: "이/가", meaning: "Chủ ngữ" },
+  { pattern: "을/를", meaning: "Tân ngữ" },
+  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
+  { pattern: "있다 / 없다", meaning: "Có / Không có" },
+];
+
+const texts = {
+  vi: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
+    login: "Login",
+    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
+    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
+    heroText:
+      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
+    start: "Bắt đầu học",
+    docs: "Xem tài liệu",
+    todayTitle: "Hôm nay học gì?",
+    todayText: "5 từ vựng mới + 2 mẫu ngữ pháp + 1 quiz ngắn.",
+    todayProgress: "Tiến độ hôm nay",
+    home: "Trang chủ",
+    learn: "Học tập",
+    flash: "Flashcard",
+    quiz: "Quiz",
+    docsTab: "Tài liệu",
+    mainTitle: "Chức năng chính",
+    vocabTitle: "Từ vựng",
+    grammarTitle: "Ngữ pháp",
+    flashTitle: "Flashcard",
+    quizTitle: "Quiz",
+    learnTitle: "Học tập",
+    addVocab: "Thêm từ vựng",
+    addGrammar: "Thêm ngữ pháp",
+    vocabList: "Danh sách từ vựng",
+    grammarList: "Danh sách ngữ pháp",
+    noVocab: "Chưa có từ nào.",
+    noGrammar: "Chưa có ngữ pháp nào.",
