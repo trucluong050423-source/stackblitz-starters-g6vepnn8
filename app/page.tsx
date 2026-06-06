@@ -43,7 +43,7 @@ const texts = {
     title: "ai-noi-hoc-tieng-han-khong-kho",
     subtitle:
       "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
-    beta: "Beta",
+    login: "Login",
     heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
     heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
     heroText:
@@ -63,7 +63,6 @@ const texts = {
     grammarTitle: "Ngữ pháp",
     flashTitle: "Flashcard",
     quizTitle: "Quiz",
-    docsTitle: "Tài liệu",
     learnTitle: "Học tập",
     addVocab: "Thêm từ vựng",
     addGrammar: "Thêm ngữ pháp",
@@ -92,7 +91,7 @@ const texts = {
     title: "ai-noi-hoc-tieng-han-khong-kho",
     subtitle:
       "Learn Korean in a simple way — vocabulary, grammar, flashcards, quizzes, and documents in one place.",
-    beta: "Beta",
+    login: "Login",
     heroTag: "✨ Learn in a simple, beautiful, and memorable way",
     heroTitle: "Start learning Korean at your own pace.",
     heroText:
@@ -112,7 +111,6 @@ const texts = {
     grammarTitle: "Grammar",
     flashTitle: "Flashcard",
     quizTitle: "Quiz",
-    docsTitle: "Documents",
     learnTitle: "Learn",
     addVocab: "Add vocabulary",
     addGrammar: "Add grammar",
@@ -279,9 +277,37 @@ export default function Page() {
     setDocs((prev) => [...prev, ...newDocs]);
   };
 
+  const blossoms = [
+    { top: "6%", left: "4%", size: 56, opacity: 0.10, rotate: -12 },
+    { top: "14%", right: "6%", size: 44, opacity: 0.08, rotate: 18 },
+    { top: "38%", left: "8%", size: 68, opacity: 0.07, rotate: 8 },
+    { top: "58%", right: "10%", size: 52, opacity: 0.09, rotate: -18 },
+    { top: "78%", left: "12%", size: 40, opacity: 0.08, rotate: 14 },
+    { top: "84%", right: "18%", size: 62, opacity: 0.06, rotate: -10 },
+  ];
+
   return (
     <div style={styles.page}>
-      {/* HEADER */}
+      <div style={styles.bgLayer} aria-hidden="true">
+        {blossoms.map((b, i) => (
+          <div
+            key={i}
+            style={{
+              ...styles.blossom,
+              top: b.top,
+              left: b.left,
+              right: b.right,
+              width: b.size,
+              height: b.size,
+              opacity: b.opacity,
+              transform: `rotate(${b.rotate}deg)`,
+            }}
+          >
+            🌸
+          </div>
+        ))}
+      </div>
+
       <header style={styles.header}>
         <div style={styles.brandBlock}>
           <div style={styles.brandIcon}>🌸</div>
@@ -313,11 +339,10 @@ export default function Page() {
             </button>
           </div>
 
-          <div style={styles.badge}>{t.beta}</div>
+          <div style={styles.badge}>{t.login}</div>
         </div>
       </header>
 
-      {/* BANNER */}
       <section style={styles.banner}>
         <div style={styles.bannerOverlay}>
           <div style={styles.bannerContent}>
@@ -353,7 +378,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* STATS */}
       <section style={styles.statsGrid}>
         {stats.map((item) => (
           <div key={item.label} style={styles.statCard}>
@@ -366,7 +390,6 @@ export default function Page() {
         ))}
       </section>
 
-      {/* NAV */}
       <nav style={styles.nav}>
         {tabs.map((item) => (
           <button
@@ -383,7 +406,6 @@ export default function Page() {
         ))}
       </nav>
 
-      {/* MAIN CONTENT */}
       <main style={styles.main}>
         {tab === "home" && (
           <section style={styles.section}>
@@ -626,7 +648,7 @@ export default function Page() {
                 docs.map((doc, index) => (
                   <div key={`${doc.name}-${index}`} style={styles.docItem}>
                     <span>📄 {doc.name}</span>
-                    {doc.url}
+                    <a href={doc.url} target="_blank" rel="noreferrer" style={styles.docLink}>
                       {t.open}
                     </a>
                   </div>
@@ -642,8 +664,10 @@ export default function Page() {
 
 const styles: Record<string, CSSProperties> = {
   page: {
+    position: "relative",
     minHeight: "100vh",
-    background: "linear-gradient(180deg, #fff7ef 0%, #fffdf8 45%, #fce7f3 100%)",
+    background:
+      "linear-gradient(180deg, #FFFDF8 0%, #EAFBF4 38%, #FFF1F7 100%)",
     color: "#1f2937",
     padding: "24px",
     paddingBottom: "96px",
@@ -651,9 +675,27 @@ const styles: Record<string, CSSProperties> = {
       'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     maxWidth: "1100px",
     margin: "0 auto",
+    overflow: "hidden",
+  },
+
+  bgLayer: {
+    position: "fixed",
+    inset: 0,
+    pointerEvents: "none",
+    zIndex: 0,
+    overflow: "hidden",
+  },
+
+  blossom: {
+    position: "absolute",
+    fontSize: "42px",
+    filter: "blur(0.2px)",
+    userSelect: "none",
   },
 
   header: {
+    position: "relative",
+    zIndex: 1,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
@@ -741,6 +783,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   banner: {
+    position: "relative",
+    zIndex: 1,
     borderRadius: "30px",
     overflow: "hidden",
     marginBottom: "24px",
@@ -748,7 +792,105 @@ const styles: Record<string, CSSProperties> = {
       "linear-gradient(135deg, rgba(255,247,239,0.96), rgba(252,231,243,0.92)), url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80')",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    border: "1px solid0.10)",    border: "1px solid #f3d9e6",
+  },
+
+  flashHint: {
+    color: "#6b7280",
+    fontSize: "13px",
+    marginBottom: "16px",
+  },
+
+  flashContent: {
+    fontSize: "36px",
+    fontWeight: 900,
+    color: "#111827",
+    minHeight: "60px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  flashActions: {
+    marginTop: "20px",
+  },
+
+  quizCard: {
+    background: "#fffdf8",
+    borderRadius: "20px",
+    padding: "18px",
     border: "1px solid #f3d9e6",
+  },
+
+  quizQuestion: {
+    fontSize: "28px",
+    fontWeight: 900,
+    color: "#111827",
+    textAlign: "center",
+    marginBottom: "18px",
+    letterSpacing: "-0.02em",
+  },
+
+  quizOptions: {
+    display: "grid",
+    gap: "10px",
+  },
+
+  quizOption: {
+    border: "1px solid #f3d9e6",
+    background: "#ffffff",
+    padding: "14px",
+    borderRadius: "16px",
+    fontWeight: 800,
+    cursor: "pointer",
+    textAlign: "left",
+    boxShadow: "0 4px 10px rgba(15, 23, 42, 0.03)",
+  },
+
+  quizFeedback: {
+    marginTop: "14px",
+    fontWeight: 900,
+    color: "#be185d",
+    textAlign: "center",
+  },
+
+  quizScore: {
+    marginTop: "10px",
+    color: "#6b7280",
+    textAlign: "center",
+  },
+
+  fileInput: {
+    display: "block",
+    width: "100%",
+    marginBottom: "10px",
+  },
+
+  helperText: {
+    margin: 0,
+    color: "#6b7280",
+    fontSize: "14px",
+  },
+
+  docItem: {
+    background: "#ffffff",
+    border: "1px solid #f3d9e6",
+    borderRadius: "16px",
+    padding: "14px",
+    marginBottom: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "12px",
+    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
+  },
+
+  docLink: {
+    color: "#be185d",
+    fontWeight: 800,
+    textDecoration: "none",
+  },
+};
     boxShadow: "0 16px 40px rgba(15, 23, 42, 0.08)",
   },
 
@@ -884,6 +1026,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   statsGrid: {
+    position: "relative",
+    zIndex: 1,
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "14px",
@@ -918,6 +1062,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   nav: {
+    position: "relative",
+    zIndex: 1,
     display: "grid",
     gridTemplateColumns: "repeat(5, 1fr)",
     gap: "10px",
@@ -954,6 +1100,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   main: {
+    position: "relative",
+    zIndex: 1,
     display: "flex",
     flexDirection: "column",
     gap: "20px",
@@ -1105,102 +1253,3 @@ const styles: Record<string, CSSProperties> = {
     padding: "34px",
     textAlign: "center",
     cursor: "pointer",
-    boxShadow: "0 14px 34px rgba(244, 114, 182, 0.10)",
-  },
-
-  flashHint: {
-    color: "#6b7280",
-    fontSize: "13px",
-    marginBottom: "16px",
-  },
-
-  flashContent: {
-    fontSize: "36px",
-    fontWeight: 900,
-    color: "#111827",
-    minHeight: "60px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  flashActions: {
-    marginTop: "20px",
-  },
-
-  quizCard: {
-    background: "#fffdf8",
-    borderRadius: "20px",
-    padding: "18px",
-    border: "1px solid #f3d9e6",
-  },
-
-  quizQuestion: {
-    fontSize: "28px",
-    fontWeight: 900,
-    color: "#111827",
-    textAlign: "center",
-    marginBottom: "18px",
-    letterSpacing: "-0.02em",
-  },
-
-  quizOptions: {
-    display: "grid",
-    gap: "10px",
-  },
-
-  quizOption: {
-    border: "1px solid #f3d9e6",
-    background: "#ffffff",
-    padding: "14px",
-    borderRadius: "16px",
-    fontWeight: 800,
-    cursor: "pointer",
-    textAlign: "left",
-    boxShadow: "0 4px 10px rgba(15, 23, 42, 0.03)",
-  },
-
-  quizFeedback: {
-    marginTop: "14px",
-    fontWeight: 900,
-    color: "#be185d",
-    textAlign: "center",
-  },
-
-  quizScore: {
-    marginTop: "10px",
-    color: "#6b7280",
-    textAlign: "center",
-  },
-
-  fileInput: {
-    display: "block",
-    width: "100%",
-    marginBottom: "10px",
-  },
-
-  helperText: {
-    margin: 0,
-    color: "#6b7280",
-    fontSize: "14px",
-  },
-
-  docItem: {
-    background: "#ffffff",
-    border: "1px solid #f3d9e6",
-    borderRadius: "16px",
-    padding: "14px",
-    marginBottom: "10px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "12px",
-    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
-  },
-
-  docLink: {
-    color: "#be185d",
-    fontWeight: 800,
-    textDecoration: "none",
-  },
-};
