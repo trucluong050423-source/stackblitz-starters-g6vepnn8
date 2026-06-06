@@ -1,34 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
-  pattern: string;
-  meaning: string;
-};
-
-type DocItem = {
-  name: string;
-  url: string;
-};
-
-const DEFAULT_VOCAB: VocabItem[] = [
-  { word: "안녕하세요", meaning: "Xin chào" },
-  { word: "감사합니다", meaning: "Cảm ơn" },
-  { word: "학교", meaning: "Trường học" },
-  { word: "학생", meaning: "Học sinh" },
-  { word: "선생님", meaning: "Giáo viên" },
-];
+import];import type { CSSProperties } from "react";
 
 const DEFAULT_GRAMMAR: GrammarItem[] = [
   { pattern: "은/는", meaning: "Chủ đề của câu" },
@@ -666,8 +639,7 @@ const styles: Record<string, CSSProperties> = {
   page: {
     position: "relative",
     minHeight: "100vh",
-    background:
-      "linear-gradient(180deg, #FFFDF8 0%, #EAFBF4 38%, #FFF1F7 100%)",
+    background: "linear-gradient(180deg, #FFFDF8 0%, #EAFBF4 38%, #FFF1F7 100%)",
     color: "#1f2937",
     padding: "24px",
     paddingBottom: "96px",
@@ -792,105 +764,7 @@ const styles: Record<string, CSSProperties> = {
       "linear-gradient(135deg, rgba(255,247,239,0.96), rgba(252,231,243,0.92)), url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    border: "1px solid0.10)",    border: "1px solid #f3d9e6",
-  },
-
-  flashHint: {
-    color: "#6b7280",
-    fontSize: "13px",
-    marginBottom: "16px",
-  },
-
-  flashContent: {
-    fontSize: "36px",
-    fontWeight: 900,
-    color: "#111827",
-    minHeight: "60px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  flashActions: {
-    marginTop: "20px",
-  },
-
-  quizCard: {
-    background: "#fffdf8",
-    borderRadius: "20px",
-    padding: "18px",
     border: "1px solid #f3d9e6",
-  },
-
-  quizQuestion: {
-    fontSize: "28px",
-    fontWeight: 900,
-    color: "#111827",
-    textAlign: "center",
-    marginBottom: "18px",
-    letterSpacing: "-0.02em",
-  },
-
-  quizOptions: {
-    display: "grid",
-    gap: "10px",
-  },
-
-  quizOption: {
-    border: "1px solid #f3d9e6",
-    background: "#ffffff",
-    padding: "14px",
-    borderRadius: "16px",
-    fontWeight: 800,
-    cursor: "pointer",
-    textAlign: "left",
-    boxShadow: "0 4px 10px rgba(15, 23, 42, 0.03)",
-  },
-
-  quizFeedback: {
-    marginTop: "14px",
-    fontWeight: 900,
-    color: "#be185d",
-    textAlign: "center",
-  },
-
-  quizScore: {
-    marginTop: "10px",
-    color: "#6b7280",
-    textAlign: "center",
-  },
-
-  fileInput: {
-    display: "block",
-    width: "100%",
-    marginBottom: "10px",
-  },
-
-  helperText: {
-    margin: 0,
-    color: "#6b7280",
-    fontSize: "14px",
-  },
-
-  docItem: {
-    background: "#ffffff",
-    border: "1px solid #f3d9e6",
-    borderRadius: "16px",
-    padding: "14px",
-    marginBottom: "10px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "12px",
-    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
-  },
-
-  docLink: {
-    color: "#be185d",
-    fontWeight: 800,
-    textDecoration: "none",
-  },
-};
     boxShadow: "0 16px 40px rgba(15, 23, 42, 0.08)",
   },
 
@@ -1253,3 +1127,128 @@ const styles: Record<string, CSSProperties> = {
     padding: "34px",
     textAlign: "center",
     cursor: "pointer",
+    boxShadow: "0 14px 34px rgba(244, 114, 182, 0.10)",
+  },
+
+  flashHint: {
+    color: "#6b7280",
+    fontSize: "13px",
+    marginBottom: "16px",
+  },
+
+  flashContent: {
+    fontSize: "36px",
+    fontWeight: 900,
+    color: "#111827",
+    minHeight: "60px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  flashActions: {
+    marginTop: "20px",
+  },
+
+  quizCard: {
+    background: "#fffdf8",
+    borderRadius: "20px",
+    padding: "18px",
+    border: "1px solid #f3d9e6",
+  },
+
+  quizQuestion: {
+    fontSize: "28px",
+    fontWeight: 900,
+    color: "#111827",
+    textAlign: "center",
+    marginBottom: "18px",
+    letterSpacing: "-0.02em",
+  },
+
+  quizOptions: {
+    display: "grid",
+    gap: "10px",
+  },
+
+  quizOption: {
+    border: "1px solid #f3d9e6",
+    background: "#ffffff",
+    padding: "14px",
+    borderRadius: "16px",
+    fontWeight: 800,
+    cursor: "pointer",
+    textAlign: "left",
+    boxShadow: "0 4px 10px rgba(15, 23, 42, 0.03)",
+  },
+
+  quizFeedback: {
+    marginTop: "14px",
+    fontWeight: 900,
+    color: "#be185d",
+    textAlign: "center",
+  },
+
+  quizScore: {
+    marginTop: "10px",
+    color: "#6b7280",
+    textAlign: "center",
+  },
+
+  fileInput: {
+    display: "block",
+    width: "100%",
+    marginBottom: "10px",
+  },
+
+  helperText: {
+    margin: 0,
+    color: "#6b7280",
+    fontSize: "14px",
+  },
+
+  docItem: {
+    background: "#ffffff",
+    border: "1px solid #f3d9e6",
+    borderRadius: "16px",
+    padding: "14px",
+    marginBottom: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "12px",
+    boxShadow: "0 6px 12px rgba(15, 23, 42, 0.03)",
+  },
+
+  docLink: {
+    color: "#be185d",
+    fontWeight: 800,
+    textDecoration: "none",
+  },
+};
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
+type GrammarItem = {
+  pattern: string;
+  meaning: string;
+};
+
+type DocItem = {
+  name: string;
+  url: string;
+};
+
+const DEFAULT_VOCAB: VocabItem[] = [
+  { word: "안녕하세요", meaning: "Xin chào" },
+  { word: "감사합니다", meaning: "Cảm ơn" },
+  { word: "학교", meaning: "Trường học" },
+  { word: "학생", meaning: "Học sinh" },
+  { word: "선생님", meaning: "Giáo viên" },
