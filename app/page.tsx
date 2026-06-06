@@ -1,18 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
+import { useEffect, useMemo, useState } fromItem = {import { useEffect, useMemo, useState } from "react";
   pattern: string;
   meaning: string;
 };
@@ -1250,3 +1238,14 @@ const styles: Record<string, CSSProperties> = {
     textDecoration: "none",
   },
 };
+import type { CSSProperties } from "react";
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
