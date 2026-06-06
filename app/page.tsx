@@ -1,18 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+type WordItem = {
+  word: string;
+  meaning: string;
+};
 
 export default function Page() {
-
   const [tab, setTab] = useState("home");
   const [subTab, setSubTab] = useState("vocab");
 
   const [word, setWord] = useState("");
   const [meaning, setMeaning] = useState("");
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<WordItem[]>([]);
 
   const [index, setIndex] = useState(0);
   const [flip, setFlip] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("korean");
+    if (saved) setList(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("korean", JSON.stringify(list));
+  }, [list]);
 
   const add = () => {
     if (!word || !meaning) return;
@@ -24,20 +37,25 @@ export default function Page() {
   const current = list[index];
 
   const next = () => {
-    setIndex((index + 1) % list.length);
+    if (list.length > 0) {
+      setIndex((index + 1) % list.length);
+    }
   };
 
   const getOptions = () => {
-    if (list.length < 3) return [];
+    if (list.length < 3 || !current) return [];
+
     const correct = current.meaning;
-    const wrong1 = list[Math.floor(Math.random()*list.length)].meaning;
-    const wrong2 = list[Math.floor(Math.random()*list.length)].meaning;
-    return [correct, wrong1, wrong2].sort(() => 0.5 - Math.random());
+    const wrong1 = list[Math.floor(Math.random() * list.length)]?.meaning;
+    const wrong2 = list[Math.floor(Math.random() * list.length)]?.meaning;
+
+    return [correct, wrong1, wrong2]
+      .filter(Boolean)
+      .sort(() => 0.5 - Math.random());
   };
 
   return (
     <div style={{ maxWidth: 420, margin: "auto", padding: 20, textAlign: "center" }}>
-
       <h1 style={{ color: "#58cc02" }}>
         ai-noi-hoc-tieng-han-khong-kho 🌸
       </h1>
@@ -62,7 +80,7 @@ export default function Page() {
       {/* HỌC TẬP */}
       {tab === "learn" && (
         <div>
-          <div>
+          <div style={{ marginBottom: 10 }}>
             <button onClick={() => setSubTab("vocab")}>📖 Từ vựng</button>
             <button onClick={() => setSubTab("grammar")}>✏️ Ngữ pháp</button>
           </div>
@@ -76,15 +94,21 @@ export default function Page() {
                 placeholder="학교"
                 value={word}
                 onChange={(e) => setWord(e.target.value)}
-              /><br />
+                style={{ margin: 5, padding: 8 }}
+              />
+              <br />
 
               <input
                 placeholder="Trường học"
                 value={meaning}
                 onChange={(e) => setMeaning(e.target.value)}
-              /><br />
+                style={{ margin: 5, padding: 8 }}
+              />
+              <br />
 
-              <button onClick={add}>➕ Add</button>
+              <button onClick={add} style={{ marginTop: 8 }}>
+                ➕ Add
+              </button>
 
               <hr />
 
@@ -123,7 +147,7 @@ export default function Page() {
                 cursor: "pointer"
               }}
             >
-              {flip ? current.meaning : current.word}
+              {flip ? current?.meaning : current?.word}
             </div>
           )}
         </div>
@@ -132,7 +156,7 @@ export default function Page() {
       {/* QUIZ */}
       {tab === "quiz" && (
         <div>
-          {list.length < 3 ? (
+          {list.length < 3 || !current ? (
             <p>Thêm ít nhất 3 từ</p>
           ) : (
             <>
@@ -145,7 +169,7 @@ export default function Page() {
                     alert(opt === current.meaning ? "✅ Đúng" : "❌ Sai");
                     next();
                   }}
-                  style={{ display: "block", margin: 5 }}
+                  style={{ display: "block", margin: "5px auto", padding: 10 }}
                 >
                   {opt}
                 </button>
@@ -164,7 +188,6 @@ export default function Page() {
           <p>🎥 Video học</p>
         </div>
       )}
-
     </div>
   );
 }
