@@ -1,53 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
-  pattern: string;
-  meaning: string;
-};
-
-type DocItem = {
-  name: string;
-  url: string;
-};
-
-const DEFAULT_VOCAB: VocabItem[] = [
-  { word: "안녕하세요", meaning: "Xin chào" },
-  { word: "감사합니다", meaning: "Cảm ơn" },
-  { word: "학교", meaning: "Trường học" },
-  { word: "학생", meaning: "Học sinh" },
-  { word: "선생님", meaning: "Giáo viên" },
-];
-
-const DEFAULT_GRAMMAR: GrammarItem[] = [
-  { pattern: "은/는", meaning: "Chủ đề của câu" },
-  { pattern: "이/가", meaning: "Chủ ngữ" },
-  { pattern: "을/를", meaning: "Tân ngữ" },
-  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
-  { pattern: "있다 / 없다", meaning: "Có / Không có" },
-];
-
-const texts = {
-  vi: {
-    title: "ai-noi-hoc-tieng-han-khong-kho",
-    subtitle:
-      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
-    beta: "Beta",
-    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
-    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
-    heroText:
-      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
+import { useEffect, useMemo, useState } from "react chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",import { useEffect, useMemo, useState } from "react";
     start: "Bắt đầu học",
     docs: "Xem tài liệu",
     todayTitle: "Hôm nay học gì?",
@@ -92,7 +45,7 @@ const texts = {
     title: "ai-noi-hoc-tieng-han-khong-kho",
     subtitle:
       "Learn Korean in a simple way — vocabulary, grammar, flashcards, quizzes, and documents in one place.",
-    beta: "Beta",
+    login: "Login",
     heroTag: "✨ Learn in a simple, beautiful, and memorable way",
     heroTitle: "Start learning Korean at your own pace.",
     heroText:
@@ -279,8 +232,39 @@ export default function Page() {
     setDocs((prev) => [...prev, ...newDocs]);
   };
 
+  // Decorative blossom icons floating softly in the background
+  const blossoms = [
+    { top: "6%", left: "4%", size: 56, opacity: 0.10, rotate: -12 },
+    { top: "14%", right: "6%", size: 44, opacity: 0.08, rotate: 18 },
+    { top: "38%", left: "8%", size: 68, opacity: 0.07, rotate: 8 },
+    { top: "58%", right: "10%", size: 52, opacity: 0.09, rotate: -18 },
+    { top: "78%", left: "12%", size: 40, opacity: 0.08, rotate: 14 },
+    { top: "84%", right: "18%", size: 62, opacity: 0.06, rotate: -10 },
+  ];
+
   return (
     <div style={styles.page}>
+      {/* soft blossom background */}
+      <div style={styles.bgLayer} aria-hidden="true">
+        {blossoms.map((b, i) => (
+          <div
+            key={i}
+            style={{
+              ...styles.blossom,
+              top: b.top,
+              left: b.left,
+              right: b.right,
+              width: b.size,
+              height: b.size,
+              opacity: b.opacity,
+              transform: `rotate(${b.rotate}deg)`,
+            }}
+          >
+            🌸
+          </div>
+        ))}
+      </div>
+
       {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.brandBlock}>
@@ -313,7 +297,7 @@ export default function Page() {
             </button>
           </div>
 
-          <div style={styles.badge}>{t.beta}</div>
+          <button style={styles.loginButton}>{t.login}</button>
         </div>
       </header>
 
@@ -626,12 +610,7 @@ export default function Page() {
                 docs.map((doc, index) => (
                   <div key={`${doc.name}-${index}`} style={styles.docItem}>
                     <span>📄 {doc.name}</span>
-                    <a
-                      href={doc.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={styles.docLink}
-                    >
+                    <a href={doc.url} target="_blank" rel="noreferrer" style={styles.docLink}>
                       {t.open}
                     </a>
                   </div>
@@ -647,8 +626,10 @@ export default function Page() {
 
 const styles: Record<string, CSSProperties> = {
   page: {
+    position: "relative",
     minHeight: "100vh",
-    background: "linear-gradient(180deg, #fff7ef 0%, #fffdf8 45%, #fce7f3 100%)",
+    background:
+      "linear-gradient(180deg, #FFFDF8 0%, #EAFBF4 38%, #FFF1F7 100%)",
     color: "#1f2937",
     padding: "24px",
     paddingBottom: "96px",
@@ -656,9 +637,27 @@ const styles: Record<string, CSSProperties> = {
       'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     maxWidth: "1100px",
     margin: "0 auto",
+    overflow: "hidden",
+  },
+
+  bgLayer: {
+    position: "fixed",
+    inset: 0,
+    pointerEvents: "none",
+    zIndex: 0,
+    overflow: "hidden",
+  },
+
+  blossom: {
+    position: "absolute",
+    fontSize: "42px",
+    filter: "blur(0.2px)",
+    userSelect: "none",
   },
 
   header: {
+    position: "relative",
+    zIndex: 1,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
@@ -676,7 +675,7 @@ const styles: Record<string, CSSProperties> = {
     width: "52px",
     height: "52px",
     borderRadius: "18px",
-    background: "linear-gradient(135deg, #f9a8d4, #fecdd3)",
+    background: "linear-gradient(135deg, #FFB6C8, #F78FB3)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -690,7 +689,7 @@ const styles: Record<string, CSSProperties> = {
     fontSize: "28px",
     fontWeight: 900,
     lineHeight: 1.15,
-    color: "#be185d",
+    color: "#BE185D",
     letterSpacing: "-0.03em",
     textTransform: "lowercase",
   },
@@ -698,7 +697,7 @@ const styles: Record<string, CSSProperties> = {
   subtitle: {
     marginTop: "8px",
     marginBottom: 0,
-    color: "#6b7280",
+    color: "#6B7280",
     fontSize: "15px",
     lineHeight: 1.7,
     maxWidth: "760px",
@@ -719,8 +718,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   langButton: {
-    border: "1px solid #f3d9e6",
-    background: "#fffdf8",
+    border: "1px solid #F3D9E6",
+    background: "#FFFDF8",
     color: "#374151",
     borderRadius: "999px",
     padding: "8px 14px",
@@ -729,31 +728,33 @@ const styles: Record<string, CSSProperties> = {
   },
 
   langButtonActive: {
-    background: "#fff1f7",
-    color: "#be185d",
-    borderColor: "#f9a8d4",
+    background: "#FFF1F7",
+    color: "#BE185D",
+    borderColor: "#F9A8D4",
   },
 
-  badge: {
-    background: "#fff1f7",
-    color: "#be185d",
+  loginButton: {
+    border: "1px solid #F9A8D4",
+    background: "#FFF1F7",
+    color: "#BE185D",
     borderRadius: "999px",
-    padding: "8px 14px",
-    fontSize: "13px",
-    fontWeight: 800,
-    whiteSpace: "nowrap",
-    border: "1px solid #f9a8d4",
+    padding: "8px 16px",
+    fontWeight: 900,
+    cursor: "pointer",
+    boxShadow: "0 8px 18px rgba(244, 114, 182, 0.10)",
   },
 
   banner: {
+    position: "relative",
+    zIndex: 1,
     borderRadius: "30px",
     overflow: "hidden",
     marginBottom: "24px",
     backgroundImage:
-      "linear-gradient(135deg, rgba(255,247,239,0.96), rgba(252,231,243,0.92)), url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80')",
+      "linear-gradient(135deg, rgba(255,253,248,0.94), rgba(234,251,244,0.86), rgba(255,241,247,0.72)), url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     boxShadow: "0 16px 40px rgba(15, 23, 42, 0.08)",
   },
 
@@ -774,9 +775,9 @@ const styles: Record<string, CSSProperties> = {
   heroTag: {
     display: "inline-flex",
     alignItems: "center",
-    background: "#fff1f7",
-    border: "1px solid #f9a8d4",
-    color: "#be185d",
+    background: "#FFF1F7",
+    border: "1px solid #F9A8D4",
+    color: "#BE185D",
     borderRadius: "999px",
     padding: "8px 14px",
     fontSize: "13px",
@@ -799,7 +800,7 @@ const styles: Record<string, CSSProperties> = {
     marginBottom: "22px",
     fontSize: "16px",
     lineHeight: 1.8,
-    color: "#6b7280",
+    color: "#6B7280",
     maxWidth: "640px",
   },
 
@@ -810,7 +811,7 @@ const styles: Record<string, CSSProperties> = {
   },
 
   primaryButton: {
-    background: "linear-gradient(135deg, #f9a8d4, #f472b6)",
+    background: "linear-gradient(135deg, #FFB6C8, #F78FB3)",
     color: "white",
     border: "none",
     borderRadius: "16px",
@@ -821,9 +822,9 @@ const styles: Record<string, CSSProperties> = {
   },
 
   secondaryButton: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     color: "#111827",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     borderRadius: "16px",
     padding: "12px 18px",
     fontWeight: 800,
@@ -832,11 +833,11 @@ const styles: Record<string, CSSProperties> = {
 
   heroCard: {
     width: "100%",
-    background: "linear-gradient(135deg, #fff1f7, #fff7ef)",
+    background: "linear-gradient(135deg, #FFF1F7, #FFFDF8)",
     borderRadius: "28px",
     padding: "28px",
     boxShadow: "0 14px 36px rgba(244, 114, 182, 0.10)",
-    border: "1px solid #f9a8d4",
+    border: "1px solid #F9A8D4",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -851,13 +852,13 @@ const styles: Record<string, CSSProperties> = {
     margin: 0,
     fontSize: "20px",
     fontWeight: 900,
-    color: "#9d174d",
+    color: "#9D174D",
   },
 
   heroCardText: {
     marginTop: "10px",
     marginBottom: 0,
-    color: "#be185d",
+    color: "#BE185D",
     lineHeight: 1.7,
   },
 
@@ -869,7 +870,7 @@ const styles: Record<string, CSSProperties> = {
     display: "flex",
     justifyContent: "space-between",
     fontSize: "13px",
-    color: "#be185d",
+    color: "#BE185D",
     marginBottom: "8px",
     fontWeight: 700,
   },
@@ -877,7 +878,7 @@ const styles: Record<string, CSSProperties> = {
   progressBar: {
     height: "12px",
     borderRadius: "999px",
-    background: "#fbcfe8",
+    background: "#FBCFE8",
     overflow: "hidden",
   },
 
@@ -885,10 +886,12 @@ const styles: Record<string, CSSProperties> = {
     width: "70%",
     height: "100%",
     borderRadius: "999px",
-    background: "linear-gradient(90deg, #f9a8d4, #f472b6)",
+    background: "linear-gradient(90deg, #FFB6C8, #F78FB3)",
   },
 
   statsGrid: {
+    position: "relative",
+    zIndex: 1,
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "14px",
@@ -896,11 +899,11 @@ const styles: Record<string, CSSProperties> = {
   },
 
   statCard: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     borderRadius: "22px",
     padding: "18px",
     boxShadow: "0 10px 24px rgba(15, 23, 42, 0.05)",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     display: "flex",
     alignItems: "center",
     gap: "14px",
@@ -918,19 +921,21 @@ const styles: Record<string, CSSProperties> = {
 
   statLabel: {
     fontSize: "13px",
-    color: "#6b7280",
+    color: "#6B7280",
     marginTop: "4px",
   },
 
   nav: {
+    position: "relative",
+    zIndex: 1,
     display: "grid",
     gridTemplateColumns: "repeat(5, 1fr)",
     gap: "10px",
     marginBottom: "24px",
-    background: "#fffdf8",
+    background: "#FFFDF8",
     padding: "10px",
     borderRadius: "20px",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     boxShadow: "0 10px 24px rgba(15, 23, 42, 0.04)",
   },
 
@@ -941,7 +946,7 @@ const styles: Record<string, CSSProperties> = {
     gap: "6px",
     border: "none",
     background: "transparent",
-    color: "#6b7280",
+    color: "#6B7280",
     fontWeight: 800,
     padding: "10px 8px",
     borderRadius: "16px",
@@ -950,8 +955,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   navButtonActive: {
-    background: "#fff1f7",
-    color: "#be185d",
+    background: "#FFF1F7",
+    color: "#BE185D",
   },
 
   navIcon: {
@@ -959,17 +964,19 @@ const styles: Record<string, CSSProperties> = {
   },
 
   main: {
+    position: "relative",
+    zIndex: 1,
     display: "flex",
     flexDirection: "column",
     gap: "20px",
   },
 
   section: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     borderRadius: "28px",
     padding: "26px",
     boxShadow: "0 14px 34px rgba(15, 23, 42, 0.05)",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
   },
 
   sectionTitle: {
@@ -988,10 +995,10 @@ const styles: Record<string, CSSProperties> = {
   },
 
   featureCard: {
-    background: "linear-gradient(180deg, #fffdf8, #fff1f7)",
+    background: "linear-gradient(180deg, #FFFDF8, #FFF1F7)",
     borderRadius: "20px",
     padding: "18px",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     boxShadow: "0 8px 18px rgba(15, 23, 42, 0.03)",
   },
 
@@ -1010,7 +1017,7 @@ const styles: Record<string, CSSProperties> = {
   featureText: {
     marginTop: "8px",
     marginBottom: 0,
-    color: "#6b7280",
+    color: "#6B7280",
     lineHeight: 1.7,
     fontSize: "14px",
   },
@@ -1023,8 +1030,8 @@ const styles: Record<string, CSSProperties> = {
   },
 
   subButton: {
-    border: "1px solid #f3d9e6",
-    background: "#fffdf8",
+    border: "1px solid #F3D9E6",
+    background: "#FFFDF8",
     color: "#374151",
     borderRadius: "14px",
     padding: "10px 16px",
@@ -1033,9 +1040,9 @@ const styles: Record<string, CSSProperties> = {
   },
 
   subButtonActive: {
-    background: "#fff1f7",
-    color: "#be185d",
-    borderColor: "#f9a8d4",
+    background: "#FFF1F7",
+    color: "#BE185D",
+    borderColor: "#F9A8D4",
   },
 
   learnLayout: {
@@ -1045,17 +1052,17 @@ const styles: Record<string, CSSProperties> = {
   },
 
   formCard: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     borderRadius: "20px",
     padding: "18px",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
   },
 
   listCard: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     borderRadius: "20px",
     padding: "18px",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
   },
 
   contentTitle: {
@@ -1068,7 +1075,7 @@ const styles: Record<string, CSSProperties> = {
 
   input: {
     width: "100%",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     borderRadius: "14px",
     padding: "12px 14px",
     marginBottom: "10px",
@@ -1078,13 +1085,13 @@ const styles: Record<string, CSSProperties> = {
   },
 
   emptyText: {
-    color: "#6b7280",
+    color: "#6B7280",
     margin: 0,
   },
 
   listItem: {
     background: "#ffffff",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     borderRadius: "16px",
     padding: "14px",
     marginBottom: "10px",
@@ -1099,13 +1106,13 @@ const styles: Record<string, CSSProperties> = {
 
   listMeaning: {
     marginTop: "4px",
-    color: "#6b7280",
+    color: "#6B7280",
     fontSize: "14px",
   },
 
   flashCard: {
-    background: "linear-gradient(135deg, #fff7ef, #fff1f7)",
-    border: "1px solid #f9a8d4",
+    background: "linear-gradient(135deg, #FFF7EF, #FFF1F7)",
+    border: "1px solid #F9A8D4",
     borderRadius: "28px",
     padding: "34px",
     textAlign: "center",
@@ -1114,7 +1121,7 @@ const styles: Record<string, CSSProperties> = {
   },
 
   flashHint: {
-    color: "#6b7280",
+    color: "#6B7280",
     fontSize: "13px",
     marginBottom: "16px",
   },
@@ -1134,10 +1141,10 @@ const styles: Record<string, CSSProperties> = {
   },
 
   quizCard: {
-    background: "#fffdf8",
+    background: "#FFFDF8",
     borderRadius: "20px",
     padding: "18px",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
   },
 
   quizQuestion: {
@@ -1155,7 +1162,7 @@ const styles: Record<string, CSSProperties> = {
   },
 
   quizOption: {
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     background: "#ffffff",
     padding: "14px",
     borderRadius: "16px",
@@ -1168,13 +1175,13 @@ const styles: Record<string, CSSProperties> = {
   quizFeedback: {
     marginTop: "14px",
     fontWeight: 900,
-    color: "#be185d",
+    color: "#BE185D",
     textAlign: "center",
   },
 
   quizScore: {
     marginTop: "10px",
-    color: "#6b7280",
+    color: "#6B7280",
     textAlign: "center",
   },
 
@@ -1186,13 +1193,13 @@ const styles: Record<string, CSSProperties> = {
 
   helperText: {
     margin: 0,
-    color: "#6b7280",
+    color: "#6B7280",
     fontSize: "14px",
   },
 
   docItem: {
     background: "#ffffff",
-    border: "1px solid #f3d9e6",
+    border: "1px solid #F3D9E6",
     borderRadius: "16px",
     padding: "14px",
     marginBottom: "10px",
@@ -1204,8 +1211,54 @@ const styles: Record<string, CSSProperties> = {
   },
 
   docLink: {
-    color: "#be185d",
+    color: "#BE185D",
     fontWeight: 800,
     textDecoration: "none",
   },
 };
+import type { CSSProperties } from "react";
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
+type GrammarItem = {
+  pattern: string;
+  meaning: string;
+};
+
+type DocItem = {
+  name: string;
+  url: string;
+};
+
+const DEFAULT_VOCAB: VocabItem[] = [
+  { word: "안녕하세요", meaning: "Xin chào" },
+  { word: "감사합니다", meaning: "Cảm ơn" },
+  { word: "학교", meaning: "Trường học" },
+  { word: "학생", meaning: "Học sinh" },
+  { word: "선생님", meaning: "Giáo viên" },
+];
+
+const DEFAULT_GRAMMAR: GrammarItem[] = [
+  { pattern: "은/는", meaning: "Chủ đề của câu" },
+  { pattern: "이/가", meaning: "Chủ ngữ" },
+  { pattern: "을/를", meaning: "Tân ngữ" },
+  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
+  { pattern: "있다 / 없다", meaning: "Có / Không có" },
+];
+
+const texts = {
+  vi: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
+    login: "Login",
+    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
+    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
+    heroText:
