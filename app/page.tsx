@@ -1,155 +1,170 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from "react";
 
 export default function Page() {
-  const [tab, setTab] = useState('learn');
-  const [data, setData] = useState([]);
-  const [word, setWord] = useState('');
-  const [meaning, setMeaning] = useState('');
+
+  const [tab, setTab] = useState("home");
+  const [subTab, setSubTab] = useState("vocab");
+
+  const [word, setWord] = useState("");
+  const [meaning, setMeaning] = useState("");
+  const [list, setList] = useState([]);
+
   const [index, setIndex] = useState(0);
+  const [flip, setFlip] = useState(false);
 
-  /* LOAD DATA */
-  useEffect(() => {
-    const saved = localStorage.getItem('korean');
-    if (saved) setData(JSON.parse(saved));
-  }, []);
-
-  /* SAVE DATA */
-  useEffect(() => {
-    localStorage.setItem('korean', JSON.stringify(data));
-  }, [data]);
-
-  /* ADD WORD */
-  const addWord = () => {
+  const add = () => {
     if (!word || !meaning) return;
-
-    setData([...data, { word, meaning }]);
-
-    setWord('');
-    setMeaning('');
+    setList([...list, { word, meaning }]);
+    setWord("");
+    setMeaning("");
   };
 
-  /* RANDOM */
-  const current = data[index];
+  const current = list[index];
 
   const next = () => {
-    setIndex((index + 1) % data.length);
+    setIndex((index + 1) % list.length);
+  };
+
+  const getOptions = () => {
+    if (list.length < 3) return [];
+    const correct = current.meaning;
+    const wrong1 = list[Math.floor(Math.random()*list.length)].meaning;
+    const wrong2 = list[Math.floor(Math.random()*list.length)].meaning;
+    return [correct, wrong1, wrong2].sort(() => 0.5 - Math.random());
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 420,
-        margin: 'auto',
-        padding: 20,
-        fontFamily: 'Arial',
-      }}
-    >
-      {/* HEADER */}
-      <h2
-        style={{
-          textAlign: 'center',
-          color: '#58cc02',
-        }}
-      >
-        Ai-noi-tieng-han-khong-kho
-      </h2>
+    <div style={{ maxWidth: 420, margin: "auto", padding: 20, textAlign: "center" }}>
+
+      <h1 style={{ color: "#58cc02" }}>
+        ai-noi-hoc-tieng-han-khong-kho 🌸
+      </h1>
 
       {/* MENU */}
-      <div style={{ textAlign: 'center', margin: 10 }}>
-        <button onClick={() => setTab('learn')}>Learn</button>
-        <button onClick={() => setTab('flash')}>Flashcard</button>
-        <button onClick={() => setTab('quiz')}>Quiz</button>
-        <button onClick={() => setTab('add')}>Add</button>
+      <div style={{ marginBottom: 15 }}>
+        <button onClick={() => setTab("home")}>🏠 Trang chủ</button>
+        <button onClick={() => setTab("learn")}>📚 Học tập</button>
+        <button onClick={() => setTab("flash")}>🧠 Flashcard</button>
+        <button onClick={() => setTab("quiz")}>🎯 Quiz</button>
+        <button onClick={() => setTab("docs")}>📂 Tài liệu</button>
       </div>
 
-      {/* LEARN */}
-      {tab === 'learn' && current && (
-        <div style={{ textAlign: 'center' }}>
-          <h3>{current.word}</h3>
-          <p>{current.meaning}</p>
-          <button onClick={next}>Next</button>
+      {/* TRANG CHỦ */}
+      {tab === "home" && (
+        <div>
+          <h2>👋 Chào mừng bạn!</h2>
+          <p>Học tiếng Hàn dễ như chơi ✨</p>
+        </div>
+      )}
+
+      {/* HỌC TẬP */}
+      {tab === "learn" && (
+        <div>
+          <div>
+            <button onClick={() => setSubTab("vocab")}>📖 Từ vựng</button>
+            <button onClick={() => setSubTab("grammar")}>✏️ Ngữ pháp</button>
+          </div>
+
+          {/* TỪ VỰNG */}
+          {subTab === "vocab" && (
+            <div>
+              <h3>Thêm từ vựng</h3>
+
+              <input
+                placeholder="학교"
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+              /><br />
+
+              <input
+                placeholder="Trường học"
+                value={meaning}
+                onChange={(e) => setMeaning(e.target.value)}
+              /><br />
+
+              <button onClick={add}>➕ Add</button>
+
+              <hr />
+
+              {list.map((item, i) => (
+                <p key={i}>
+                  {item.word} - {item.meaning}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {/* NGỮ PHÁP */}
+          {subTab === "grammar" && (
+            <div>
+              <h3>Ngữ pháp cơ bản</h3>
+              <p>은/는 → Chủ đề</p>
+              <p>이/가 → Chủ ngữ</p>
+              <p>을/를 → Tân ngữ</p>
+            </div>
+          )}
         </div>
       )}
 
       {/* FLASHCARD */}
-      {tab === 'flash' && current && <Flashcard data={current} />}
-
-      {/* QUIZ */}
-      {tab === 'quiz' && current && (
-        <Quiz data={data} index={index} next={next} />
-      )}
-
-      {/* ADD */}
-      {tab === 'add' && (
+      {tab === "flash" && (
         <div>
-          <input
-            placeholder="Từ"
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-          />
-
-          <input
-            placeholder="Nghĩa"
-            value={meaning}
-            onChange={(e) => setMeaning(e.target.value)}
-          />
-
-          <button onClick={addWord}>➕ Add</button>
+          {list.length === 0 ? (
+            <p>Chưa có từ</p>
+          ) : (
+            <div
+              onClick={() => setFlip(!flip)}
+              style={{
+                padding: 40,
+                background: "#f1f1f1",
+                borderRadius: 10,
+                cursor: "pointer"
+              }}
+            >
+              {flip ? current.meaning : current.word}
+            </div>
+          )}
         </div>
       )}
-    </div>
-  );
-}
 
-/* FLASHCARD COMPONENT */
-function Flashcard({ data }) {
-  const [flip, setFlip] = useState(false);
+      {/* QUIZ */}
+      {tab === "quiz" && (
+        <div>
+          {list.length < 3 ? (
+            <p>Thêm ít nhất 3 từ</p>
+          ) : (
+            <>
+              <h3>{current.word}</h3>
 
-  return (
-    <div
-      onClick={() => setFlip(!flip)}
-      style={{
-        padding: 40,
-        background: '#f1f1f1',
-        textAlign: 'center',
-        borderRadius: 10,
-      }}
-    >
-      {flip ? data.meaning : data.word}
-    </div>
-  );
-}
+              {getOptions().map((opt, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    alert(opt === current.meaning ? "✅ Đúng" : "❌ Sai");
+                    next();
+                  }}
+                  style={{ display: "block", margin: 5 }}
+                >
+                  {opt}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+      )}
 
-/* QUIZ COMPONENT */
-function Quiz({ data, index, next }) {
-  const current = data[index];
+      {/* TÀI LIỆU */}
+      {tab === "docs" && (
+        <div>
+          <h3>📂 Tài liệu học</h3>
+          <p>📘 Sách TOPIK (thêm sau)</p>
+          <p>📄 PDF học tiếng Hàn</p>
+          <p>🎥 Video học</p>
+        </div>
+      )}
 
-  const options = [
-    current.meaning,
-    data[Math.floor(Math.random() * data.length)].meaning,
-    data[Math.floor(Math.random() * data.length)].meaning,
-  ];
-
-  const shuffled = options.sort(() => 0.5 - Math.random());
-
-  return (
-    <div>
-      <h3>{current.word}</h3>
-
-      {shuffled.map((opt, i) => (
-        <button
-          key={i}
-          onClick={() => {
-            alert(opt === current.meaning ? '✅ Đúng' : '❌ Sai');
-            next();
-          }}
-          style={{ display: 'block', margin: 5 }}
-        >
-          {opt}
-        </button>
-      ))}
     </div>
   );
 }
