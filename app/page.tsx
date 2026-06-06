@@ -1,6 +1,53 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
+
+type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
+type LearnKey = "vocab" | "grammar";
+type LangKey = "vi" | "en";
+
+type VocabItem = {
+  word: string;
+  meaning: string;
+};
+
+type GrammarItem = {
+  pattern: string;
+  meaning: string;
+};
+
+type DocItem = {
+  name: string;
+  url: string;
+};
+
+const DEFAULT_VOCAB: VocabItem[] = [
+  { word: "안녕하세요", meaning: "Xin chào" },
+  { word: "감사합니다", meaning: "Cảm ơn" },
+  { word: "학교", meaning: "Trường học" },
+  { word: "학생", meaning: "Học sinh" },
+  { word: "선생님", meaning: "Giáo viên" },
+];
+
+const DEFAULT_GRAMMAR: GrammarItem[] = [
+  { pattern: "은/는", meaning: "Chủ đề của câu" },
+  { pattern: "이/가", meaning: "Chủ ngữ" },
+  { pattern: "을/를", meaning: "Tân ngữ" },
+  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
+  { pattern: "있다 / 없다", meaning: "Có / Không có" },
+];
+
+const texts = {
+  vi: {
+    title: "ai-noi-hoc-tieng-han-khong-kho",
+    subtitle:
+      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
+    login: "Login",
+    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
+    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
+    heroText:
+      "Bạn có thể tự thêm từ mới, ghi chú ngữ pháp, lật flashcard, làm quiz và lưu tài liệu học tập ngay trong app.",
     start: "Bắt đầu học",
     docs: "Xem tài liệu",
     todayTitle: "Hôm nay học gì?",
@@ -610,7 +657,7 @@ export default function Page() {
                 docs.map((doc, index) => (
                   <div key={`${doc.name}-${index}`} style={styles.docItem}>
                     <span>📄 {doc.name}</span>
-                    <a href={doc.url} target="_blank" rel="noreferrer" style={styles.docLink}>
+                    {doc.url}
                       {t.open}
                     </a>
                   </div>
@@ -1216,49 +1263,3 @@ const styles: Record<string, CSSProperties> = {
     textDecoration: "none",
   },
 };
-import type { CSSProperties } from "react";
-
-type TabKey = "home" | "learn" | "flash" | "quiz" | "docs";
-type LearnKey = "vocab" | "grammar";
-type LangKey = "vi" | "en";
-
-type VocabItem = {
-  word: string;
-  meaning: string;
-};
-
-type GrammarItem = {
-  pattern: string;
-  meaning: string;
-};
-
-type DocItem = {
-  name: string;
-  url: string;
-};
-
-const DEFAULT_VOCAB: VocabItem[] = [
-  { word: "안녕하세요", meaning: "Xin chào" },
-  { word: "감사합니다", meaning: "Cảm ơn" },
-  { word: "학교", meaning: "Trường học" },
-  { word: "학생", meaning: "Học sinh" },
-  { word: "선생님", meaning: "Giáo viên" },
-];
-
-const DEFAULT_GRAMMAR: GrammarItem[] = [
-  { pattern: "은/는", meaning: "Chủ đề của câu" },
-  { pattern: "이/가", meaning: "Chủ ngữ" },
-  { pattern: "을/를", meaning: "Tân ngữ" },
-  { pattern: "입니다", meaning: "Là / là (trang trọng)" },
-  { pattern: "있다 / 없다", meaning: "Có / Không có" },
-];
-
-const texts = {
-  vi: {
-    title: "ai-noi-hoc-tieng-han-khong-kho",
-    subtitle:
-      "Học tiếng Hàn dễ như chơi — từ vựng, ngữ pháp, flashcard, quiz và tài liệu trong một nơi.",
-    login: "Login",
-    heroTag: "✨ Học theo cách đơn giản, đẹp và dễ nhớ",
-    heroTitle: "Bắt đầu học tiếng Hàn theo nhịp riêng của bạn.",
-    heroText:
